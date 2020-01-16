@@ -1,0 +1,48 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - bin/*
+    - db/**/*.rb
+    - tmp/*
+    - Rakefile
+    - test/dummy/**/*
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+Metrics/LineLength:
+  Max: 119 # line length on GitHub's PR pages
+
+Metrics/MethodLength:
+  Max: 14
+  Exclude:
+    - test/**/*.rb
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - staging
+    - sandbox
+    - production
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - test/**/*.rb
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes

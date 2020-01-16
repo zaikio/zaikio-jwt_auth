@@ -5,6 +5,7 @@ rescue LoadError
 end
 
 require 'rdoc/task'
+require 'rubocop/rake_task'
 
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
@@ -25,3 +26,12 @@ Rake::TestTask.new(:test) do |t|
 end
 
 task default: :test
+
+namespace :test do
+  desc 'Runs RuboCop on specified directories'
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    task.fail_on_error = false
+  end
+end
+
+Rake::Task[:test].enhance ['test:rubocop']
