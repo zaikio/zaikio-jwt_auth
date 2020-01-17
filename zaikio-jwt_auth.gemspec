@@ -1,4 +1,4 @@
-$:.push File.expand_path("lib", __dir__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "zaikio/jwt_auth/version"
@@ -25,5 +25,8 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  spec.add_dependency "rails", "~> 6.0.2", ">= 6.0.2.1"
+  spec.add_dependency "oj", ">= 3.0.0"
+  spec.add_dependency "rails", ">= 6.0.1"
+  # Authorization tokens
+  spec.add_dependency "jwt", ">= 2.2.1"
 end
