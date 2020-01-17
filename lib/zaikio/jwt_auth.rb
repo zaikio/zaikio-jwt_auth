@@ -1,4 +1,5 @@
 require "jwt"
+require "oj"
 require "zaikio/jwt_auth/railtie"
 require "zaikio/jwt_auth/configuration"
 require "zaikio/jwt_auth/directory_cache"

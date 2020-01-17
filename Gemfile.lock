@@ -3,6 +3,7 @@ PATH
   specs:
     zaikio-jwt_auth (0.1.0)
       jwt (>= 2.2.1)
+      oj (>= 3.0.0)
       rails (>= 6.0.1)
 
 GEM
@@ -95,6 +96,7 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
+    oj (3.10.1)
     parallel (1.19.1)
     parser (2.7.0.2)
       ast (~> 2.4.0)

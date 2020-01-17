@@ -9,7 +9,7 @@ module Zaikio
         def fetch(directory_path, options = {})
           cache = Zaikio::JWTAuth.configuration.redis.get("zaikio::jwt_auth::#{directory_path}")
 
-          json = JSON.parse(cache) if cache
+          json = Oj.load(cache) if cache
 
           if !cache || options[:invalidate] || cache_expired?(json, options[:expires_after])
             return reload(directory_path)
@@ -46,7 +46,7 @@ module Zaikio
 
         def fetch_from_directory(directory_path)
           uri = URI("#{Zaikio::JWTAuth.configuration.host}/#{directory_path}")
-          JSON.parse(Net::HTTP.get(uri))
+          Oj.load(Net::HTTP.get(uri))
         end
       end
     end
