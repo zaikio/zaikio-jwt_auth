@@ -26,9 +26,7 @@ module Zaikio
       end
 
       def scope?(allowed_scopes, action_name)
-        allowed_scopes = [allowed_scopes] unless allowed_scopes.is_a?(Array)
-
-        allowed_scopes.map(&:to_s).any? do |allowed_scope|
+        Array(allowed_scopes).map(&:to_s).any? do |allowed_scope|
           scope.any? do |s|
             parts = s.split(".")
             parts[0] == Zaikio::JWTAuth.configuration.app_name &&
