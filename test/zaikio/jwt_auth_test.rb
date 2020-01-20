@@ -79,47 +79,55 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
   test "unauthorized if no token was passed" do
     get "/resources"
     assert_response :unauthorized
+    assert_equal({ "errors" => ["no_jwt_passed"] }.to_json, response.body)
   end
 
   test "forbidden if invalid JWT was passed" do
     get "/resources", headers: { "Authorization" => "Bearer xxx" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["invalid_jwt"] }.to_json, response.body)
   end
 
   test "forbidden if JWT expired" do
     token = generate_token(exp: 1.hour.ago.to_i)
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["jwt_expired"] }.to_json, response.body)
   end
 
   test "forbidden if invalid signature" do
     token = generate_token({}, other_dummy_private_key)
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["invalid_jwt"] }.to_json, response.body)
   end
 
   test "forbidden if invalid subject type" do
     token = generate_token(sub: "Person/abc")
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["unpermitted_subject"] }.to_json, response.body)
   end
 
   test "forbidden if scope does not exist" do
     token = generate_token(scope: ["directory.person.r", "test_app.some.rw"])
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
   end
 
   test "forbidden if scope does not have correct permission" do
     token = generate_token
     post "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
   end
 
   test "forbidden if token was blacklisted" do
     token = generate_token(jti: "very-bad-token")
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
+    assert_equal({ "errors" => ["invalid_jwt"] }.to_json, response.body)
   end
 
   test "is successful if correct JWT was passed" do
