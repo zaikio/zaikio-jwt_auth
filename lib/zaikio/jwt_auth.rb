@@ -34,9 +34,7 @@ module Zaikio
 
     module InstanceMethods
       def authenticate_by_jwt
-        unless jwt_from_auth_header
-          render(status: :unauthorized, plain: "Please authenticate via Zaikio JWT") && return
-        end
+        render_error("no_jwt_passed", status: :unauthorized) && return unless jwt_from_auth_header
 
         token_data = TokenData.new(jwt_payload)
 
@@ -48,9 +46,9 @@ module Zaikio
 
         send(:after_jwt_auth, token_data) if respond_to?(:after_jwt_auth)
       rescue JWT::ExpiredSignature
-        render(status: :forbidden, plain: "JWT expired") && (return)
+        render_error("jwt_expired") && (return)
       rescue JWT::DecodeError
-        render(status: :forbidden, plain: "Invalid JWT") && (return)
+        render_error("invalid_jwt") && (return)
       end
 
       private
@@ -71,7 +69,7 @@ module Zaikio
           return
         end
 
-        render(status: :forbidden, plain: "Invalid scope")
+        render_error("unpermitted_scope")
       end
 
       def show_error_if_authorize_by_jwt_subject_type_fails(token_data)
@@ -80,13 +78,13 @@ module Zaikio
           return
         end
 
-        render(status: :forbidden, plain: "Unallowed subject type")
+        render_error("unpermitted_subject")
       end
 
       def show_error_if_token_is_blacklisted(token_data)
         return unless blacklisted_token_ids.include?(token_data.jti)
 
-        render(status: :forbidden, plain: "Invalid token")
+        render_error("invalid_jwt")
       end
 
       def blacklisted_token_ids
@@ -95,6 +93,10 @@ module Zaikio
         end
 
         DirectoryCache.fetch("api/v1/blacklisted_token_ids.json", expires_after: 5.minutes)["blacklisted_token_ids"]
+      end
+
+      def render_error(error, status: :forbidden)
+        render(status: status, json: { "errors" => [error] })
       end
     end
   end
