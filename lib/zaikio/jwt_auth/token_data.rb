@@ -17,6 +17,14 @@ module Zaikio
         @payload = payload
       end
 
+      def audience
+        audiences.first
+      end
+
+      def audiences
+        @payload["aud"] || []
+      end
+
       def scope
         @payload["scope"]
       end

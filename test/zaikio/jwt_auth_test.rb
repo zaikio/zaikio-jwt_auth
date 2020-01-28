@@ -58,6 +58,7 @@ class ResourcesController < ApplicationController
   def after_jwt_auth(token_data)
     klass = token_data.subject_type == "Organization" ? Organization : Person
     @scope = klass.find(token_data.subject_id) # Current.scope
+    @audience = token_data.audience
   end
 end
 
@@ -138,5 +139,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
     scope = controller.instance_variable_get(:@scope)
     assert_equal Organization, scope.class
     assert_equal "123", scope.id
+    audience = controller.instance_variable_get(:@audience)
+    assert_equal "directory", audience
   end
 end
