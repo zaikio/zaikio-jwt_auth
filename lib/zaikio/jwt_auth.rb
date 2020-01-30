@@ -27,8 +27,8 @@ module Zaikio
         @authorize_by_jwt_subject_type ||= type
       end
 
-      def authorize_by_jwt_scopes(scopes = nil)
-        @authorize_by_jwt_scopes ||= scopes
+      def authorize_by_jwt_scopes(scopes = nil, options = {})
+        @authorize_by_jwt_scopes ||= options.merge(scopes: scopes)
       end
     end
 
@@ -65,9 +65,8 @@ module Zaikio
       end
 
       def show_error_if_authorize_by_jwt_scopes_fails(token_data)
-        if !self.class.authorize_by_jwt_scopes || token_data.scope?(self.class.authorize_by_jwt_scopes, action_name)
-          return
-        end
+        scope_data = self.class.authorize_by_jwt_scopes
+        return if !scope_data[:scopes] || token_data.scope?(scope_data[:scopes], action_name, scope_data[:app_name])
 
         render_error("unpermitted_scope")
       end

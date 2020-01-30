@@ -33,11 +33,12 @@ module Zaikio
         @payload["jti"]
       end
 
-      def scope?(allowed_scopes, action_name)
+      def scope?(allowed_scopes, action_name, app_name = nil)
+        app_name ||= Zaikio::JWTAuth.configuration.app_name
         Array(allowed_scopes).map(&:to_s).any? do |allowed_scope|
           scope.any? do |s|
             parts = s.split(".")
-            parts[0] == Zaikio::JWTAuth.configuration.app_name &&
+            parts[0] == app_name &&
               parts[1] == allowed_scope &&
               action_in_permission?(action_name, parts[2])
           end
