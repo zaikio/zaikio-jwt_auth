@@ -62,6 +62,18 @@ class ResourcesController < ApplicationController
   end
 end
 
+class OtherAppResourcesController < ApplicationController
+  include Zaikio::JWTAuth
+
+  before_action :authenticate_by_jwt
+
+  authorize_by_jwt_scopes :organization, app_name: "directory"
+
+  def index
+    render plain: "hello"
+  end
+end
+
 class ResourcesControllerTest < ActionDispatch::IntegrationTest
   def setup
     Zaikio::JWTAuth.configure do |config|
@@ -76,6 +88,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
 
     Rails.application.routes.draw do
       resources :resources
+      resources :other_app_resources
     end
   end
 
@@ -143,5 +156,20 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "123", scope.id
     audience = controller.instance_variable_get(:@audience)
     assert_equal "directory", audience
+  end
+
+  test "successful if correct JWT was passed with other app name" do
+    token = generate_token
+    get "/other_app_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+  end
+
+  test "forbissen if correct JWT was passed with wrong app name" do
+    token = generate_token(
+      scope: ["test_app.organization.r"]
+    )
+    get "/other_app_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :forbidden
+    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
   end
 end
