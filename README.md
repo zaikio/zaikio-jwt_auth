@@ -6,7 +6,7 @@ Gem for JWT-Based authentication and authorization with zaikio.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+1. Add this line to your application's Gemfile:
 
 ```ruby
 gem 'zaikio-jwt_auth'
@@ -22,7 +22,7 @@ Or install it yourself as:
 $ gem install zaikio-jwt_auth
 ```
 
-Configure the gem:
+2. Configure the gem:
 
 ```rb
 # config/initializers/zaikio_jwt_auth.rb
@@ -34,7 +34,7 @@ Zaikio::JWTAuth.configure do |config|
 end
 ```
 
-Extend your API application controller:
+3. Extend your API application controller:
 
 ```rb
 class API::ApplicationController < ActionController::Base
@@ -49,7 +49,40 @@ class API::ApplicationController < ActionController::Base
 end
 ```
 
-Add more restrictions to your resources:
+4. Update Revoked Access Tokens by Webhook
+
+```rb
+# ENV['ZAIKIO_SHARED_SECRET'] needs to be defined first, you can find it on your
+# app details page in zaikio. Fore more help read:
+# https://docs.zaikio.com/guide/loom/receiving-events.html
+class WebhooksController < ActionController::Base
+  include Zaikio::JWTAuth
+
+  before_action :verify_signature
+  before_action :update_blacklisted_access_tokens_by_webhook
+
+  def create
+    case params[:name]
+      # Manage other events
+    end
+  end
+
+  private
+
+  def verify_signature
+    # Read More: https://docs.zaikio.com/guide/loom/receiving-events.html
+    unless ActiveSupport::SecurityUtils.secure_compare(
+      OpenSSL::HMAC.hexdigest("SHA256", "shared-secret", request.body.read),
+      request.headers["X-Loom-Signature"]
+    )
+      render status: :unauthorized, json: { errors: ["invalid_signature"] }
+    end
+  end
+end
+```
+
+
+5. Add more restrictions to your resources:
 
 ```rb
 class API::ResourcesController < API::ApplicationController

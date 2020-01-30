@@ -18,6 +18,19 @@ module Zaikio
           json["data"]
         end
 
+        def update(directory_path, options = {})
+          data = fetch(directory_path, options)
+          data = yield(data)
+          Zaikio::JWTAuth.configuration.redis.set("zaikio::jwt_auth::#{directory_path}", {
+            fetched_at: Time.now.to_i,
+            data: data
+          }.to_json)
+        end
+
+        def reset(directory_path)
+          Zaikio::JWTAuth.configuration.redis.del("zaikio::jwt_auth::#{directory_path}")
+        end
+
         private
 
         def cache_expired?(json, expires_after)

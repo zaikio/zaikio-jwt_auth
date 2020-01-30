@@ -72,6 +72,8 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
 
     stub_requests
 
+    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/blacklisted_token_ids.json")
+
     Rails.application.routes.draw do
       resources :resources
     end
