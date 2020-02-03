@@ -65,6 +65,8 @@ class WebhooksController < ActionController::Base
     case params[:name]
       # Manage other events
     end
+
+    render json: { received: true }
   end
 
   private
@@ -75,7 +77,7 @@ class WebhooksController < ActionController::Base
       OpenSSL::HMAC.hexdigest("SHA256", "shared-secret", request.body.read),
       request.headers["X-Loom-Signature"]
     )
-      render status: :unauthorized, json: { errors: ["invalid_signature"] }
+      render json: { received: true }
     end
   end
 end

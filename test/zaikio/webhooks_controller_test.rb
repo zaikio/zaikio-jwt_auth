@@ -7,7 +7,7 @@ class WebhooksController < ApplicationController
   before_action :update_blacklisted_access_tokens_by_webhook
 
   def create
-    render json: {}
+    render json: { received: true }
   end
 
   private
@@ -18,7 +18,7 @@ class WebhooksController < ApplicationController
       OpenSSL::HMAC.hexdigest("SHA256", "shared-secret", request.body.read),
       request.headers["X-Loom-Signature"]
     )
-      render status: :unauthorized, json: { errors: ["invalid_signature"] }
+      render json: { received: true }
     end
   end
 end
@@ -51,12 +51,13 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     OpenSSL::HMAC.hexdigest("SHA256", key, event.to_json)
   end
 
-  test "unauthorized if signature is invalid" do
+  test "success if signature is invalid but does not add token" do
     post "/webhooks", params: @event.to_json,
                       headers: { "Content-Type" => "application/json",
                                  "X-Loom-Signature" => signature(@event, "wrong-key") }
-    assert_response :unauthorized
-    assert_equal({ "errors" => ["invalid_signature"] }.to_json, response.body)
+    assert_response :success
+    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/blacklisted_token_ids.json")
+    assert_not_equal "my-webhook-token", cache["blacklisted_token_ids"].last
   end
 
   test "adds token to blacklisted tokens" do
@@ -73,6 +74,6 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     post "/webhooks", params: @event.to_json,
                       headers: { "Content-Type" => "application/json", "X-Loom-Signature" => signature(@event) }
     assert_response :success
-    assert_equal({}.to_json, response.body)
+    assert_equal({ "received" => true }.to_json, response.body)
   end
 end
