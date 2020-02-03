@@ -1,6 +1,18 @@
 require "test_helper"
 
 class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
+  def setup
+    Zaikio::JWTAuth.configure do |config|
+      config.environment = :test
+      config.app_name = "test_app"
+      config.redis = Redis.new
+    end
+
+    stub_requests
+
+    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/blacklisted_token_ids.json")
+  end
+
   test "is a module" do
     assert_kind_of Module, Zaikio::JWTAuth
   end
@@ -20,6 +32,11 @@ class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
     assert_equal "test_app",              Zaikio::JWTAuth.configuration.app_name
     assert_match "directory.zaikio.test", Zaikio::JWTAuth.configuration.host
     assert_not_nil Zaikio::JWTAuth.configuration.redis
+  end
+
+  test "revoked_jwt?" do
+    assert Zaikio::JWTAuth.revoked_jwt?("very-bad-token")
+    assert_not Zaikio::JWTAuth.revoked_jwt?("other-token")
   end
 end
 
