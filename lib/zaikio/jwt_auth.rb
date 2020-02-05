@@ -17,6 +17,16 @@ module Zaikio
       yield(configuration)
     end
 
+    def self.revoked_jwt?(jti)
+      blacklisted_token_ids.include?(jti)
+    end
+
+    def self.blacklisted_token_ids
+      return configuration.blacklisted_token_ids if configuration.blacklisted_token_ids
+
+      DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json", expires_after: 60.minutes)["blacklisted_token_ids"]
+    end
+
     def self.included(base)
       base.send :include, InstanceMethods
       base.send :extend, ClassMethods
@@ -92,18 +102,9 @@ module Zaikio
       end
 
       def show_error_if_token_is_blacklisted(token_data)
-        return unless blacklisted_token_ids.include?(token_data.jti)
+        return unless Zaikio::JWTAuth.revoked_jwt?(token_data.jti)
 
         render_error("invalid_jwt")
-      end
-
-      def blacklisted_token_ids
-        if Zaikio::JWTAuth.configuration.blacklisted_token_ids
-          return Zaikio::JWTAuth.configuration.blacklisted_token_ids
-        end
-
-        DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json",
-                             expires_after: 60.minutes)["blacklisted_token_ids"]
       end
 
       def render_error(error, status: :forbidden)

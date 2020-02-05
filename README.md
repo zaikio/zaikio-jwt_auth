@@ -92,3 +92,11 @@ class API::ResourcesController < API::ApplicationController
   authorize_by_jwt_scopes 'resources'
 end
 ```
+
+6. Optionally, if you are using SSO: Check revoked tokens
+
+Additionally, the API provides a method called `revoked_jwt?` which expects the `jti` of the JWT.
+
+```rb
+Zaikio::JWTAuth.revoked_jwt?('jti-of-token') # returns true if token was revoked
+```
