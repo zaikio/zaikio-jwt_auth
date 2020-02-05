@@ -64,7 +64,7 @@ module Zaikio
       def update_blacklisted_access_tokens_by_webhook
         return unless params[:name] == "directory.revoked_access_token"
 
-        DirectoryCache.update("api/v1/blacklisted_token_ids.json", expires_after: 60.minutes) do |data|
+        DirectoryCache.update("api/v1/blacklisted_access_tokens.json", expires_after: 60.minutes) do |data|
           data["blacklisted_token_ids"] << params[:payload][:access_token_id]
           data
         end

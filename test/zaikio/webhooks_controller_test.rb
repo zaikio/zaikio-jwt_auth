@@ -37,7 +37,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
       resources :webhooks
     end
 
-    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/blacklisted_token_ids.json")
+    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/blacklisted_access_tokens.json")
 
     @event = {
       name: "directory.revoked_access_token",
@@ -56,7 +56,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
                       headers: { "Content-Type" => "application/json",
                                  "X-Loom-Signature" => signature(@event, "wrong-key") }
     assert_response :success
-    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/blacklisted_token_ids.json")
+    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json")
     assert_not_equal "my-webhook-token", cache["blacklisted_token_ids"].last
   end
 
@@ -64,7 +64,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     post "/webhooks", params: @event.to_json,
                       headers: { "Content-Type" => "application/json", "X-Loom-Signature" => signature(@event) }
     assert_response :success
-    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/blacklisted_token_ids.json")
+    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json")
     assert_equal "my-webhook-token", cache["blacklisted_token_ids"].last
     assert_equal({ "received" => true }.to_json, response.body)
   end
