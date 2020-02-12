@@ -12,6 +12,8 @@ require "rails/test_unit/reporter"
 Rails::TestUnitReporter.executable = "bin/test"
 
 class ActiveSupport::TestCase
+  include Zaikio::JWTAuth::TestHelper
+
   def dummy_private_key
     OpenSSL::PKey::RSA.new(
       "-----BEGIN RSA PRIVATE KEY-----

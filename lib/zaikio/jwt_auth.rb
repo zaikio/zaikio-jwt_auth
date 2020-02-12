@@ -5,6 +5,7 @@ require "zaikio/jwt_auth/configuration"
 require "zaikio/jwt_auth/directory_cache"
 require "zaikio/jwt_auth/jwk"
 require "zaikio/jwt_auth/token_data"
+require "zaikio/jwt_auth/test_helper"
 
 module Zaikio
   module JWTAuth
@@ -22,6 +23,8 @@ module Zaikio
     end
 
     def self.blacklisted_token_ids
+      return [] if mocked_jwt_payload
+
       return configuration.blacklisted_token_ids if configuration.blacklisted_token_ids
 
       DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json", expires_after: 60.minutes)["blacklisted_token_ids"]
@@ -30,6 +33,14 @@ module Zaikio
     def self.included(base)
       base.send :include, InstanceMethods
       base.send :extend, ClassMethods
+    end
+
+    def self.mocked_jwt_payload
+      @mocked_jwt_payload
+    end
+
+    def self.mocked_jwt_payload=(payload)
+      @mocked_jwt_payload = payload
     end
 
     module ClassMethods
@@ -75,11 +86,15 @@ module Zaikio
       private
 
       def jwt_from_auth_header
+        return true if Zaikio::JWTAuth.mocked_jwt_payload
+
         auth_header = request.headers["Authorization"]
         auth_header.split("Bearer ").last if /Bearer/.match?(auth_header)
       end
 
       def jwt_payload
+        return Zaikio::JWTAuth.mocked_jwt_payload if Zaikio::JWTAuth.mocked_jwt_payload
+
         payload, = JWT.decode(jwt_from_auth_header, nil, true, algorithms: ["RS256"], jwks: JWK.loader)
 
         payload
