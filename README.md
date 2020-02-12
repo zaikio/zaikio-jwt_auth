@@ -100,3 +100,13 @@ Additionally, the API provides a method called `revoked_jwt?` which expects the 
 ```rb
 Zaikio::JWTAuth.revoked_jwt?('jti-of-token') # returns true if token was revoked
 ```
+
+7. Optionally, use the test helper module to mock JWTs in your minitests
+
+```rb
+# in your test_helper.rb
+include Zaikio::JWTAuth::TestHelper
+
+# in your tests you can use:
+mock_jwt(sub: 'Organization/123', scope: ['directory.organization.r'])
+```
