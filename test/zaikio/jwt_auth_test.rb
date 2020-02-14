@@ -62,7 +62,9 @@ class ResourcesController < ApplicationController
 
   # can also be called later
   authorize_by_jwt_subject_type "Organization"
-  authorize_by_jwt_scopes :resources
+  authorize_by_jwt_scopes :resources, except: :destroy
+  authorize_by_jwt_scopes :resources_destroy, only: [:destroy]
+
 
   def index
     render plain: "hello"
@@ -70,6 +72,10 @@ class ResourcesController < ApplicationController
 
   def create
     render plain: "hello"
+  end
+
+  def destroy
+    render plain: "destroy"
   end
 
   def after_jwt_auth(token_data)
@@ -161,6 +167,19 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
     assert_equal({ "errors" => ["invalid_jwt"] }.to_json, response.body)
+  end
+
+  test "forbidden if scope is only for one action" do
+    token = generate_token(scope: ["test_app.resources_destroy.w"])
+    get "/resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :forbidden
+    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+  end
+
+  test "successful if scope is only for one action but the right one" do
+    token = generate_token(scope: ["test_app.resources_destroy.w"])
+    delete "/resources/123", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
   end
 
   test "is successful if correct JWT was passed" do
