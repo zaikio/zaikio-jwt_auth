@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zaikio-jwt_auth (0.1.4)
+    zaikio-jwt_auth (0.1.5)
       jwt (>= 2.2.1)
       oj (>= 3.0.0)
       rails (>= 6.0.1)
@@ -69,7 +69,7 @@ GEM
     ast (2.4.0)
     builder (3.2.4)
     byebug (11.0.1)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
@@ -94,7 +94,7 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.14.0)
     nio4r (2.5.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     oj (3.10.2)
     parallel (1.19.1)
