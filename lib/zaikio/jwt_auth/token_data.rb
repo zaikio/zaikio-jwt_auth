@@ -33,6 +33,24 @@ module Zaikio
         @payload["jti"]
       end
 
+      # scope_options is an array of objects with:
+      # scope, app_name (optional), except/only (array, optional)
+      def scope_by_configurations?(scope_configurations, action_name)
+        configuration = scope_configurations.find do |scope_configuration|
+          if scope_configuration[:only]
+            Array(scope_configuration[:only]).any? { |a| a.to_s == action_name }
+          elsif scope_configuration[:except]
+            Array(scope_configuration[:except]).none? { |a| a.to_s == action_name }
+          else
+            true
+          end
+        end
+
+        return true unless configuration
+
+        scope?(configuration[:scopes], action_name, configuration[:app_name])
+      end
+
       def scope?(allowed_scopes, action_name, app_name = nil)
         app_name ||= Zaikio::JWTAuth.configuration.app_name
         Array(allowed_scopes).map(&:to_s).any? do |allowed_scope|

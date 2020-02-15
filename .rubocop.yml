@@ -19,6 +19,9 @@ Metrics/MethodLength:
   Exclude:
     - test/**/*.rb
 
+Metrics/AbcSize:
+  Max: 16
+
 Metrics/CyclomaticComplexity:
   Max: 10
 
