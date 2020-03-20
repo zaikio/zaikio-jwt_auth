@@ -65,7 +65,6 @@ class ResourcesController < ApplicationController
   authorize_by_jwt_scopes :resources, except: :destroy
   authorize_by_jwt_scopes :resources_destroy, only: [:destroy]
 
-
   def index
     render plain: "hello"
   end
