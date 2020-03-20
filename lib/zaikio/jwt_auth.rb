@@ -107,7 +107,8 @@ module Zaikio
       def show_error_if_authorize_by_jwt_scopes_fails(token_data)
         return if token_data.scope_by_configurations?(
           self.class.authorize_by_jwt_scopes,
-          action_name
+          action_name,
+          self
         )
 
         render_error("unpermitted_scope")
