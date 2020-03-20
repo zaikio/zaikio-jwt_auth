@@ -62,9 +62,8 @@ class ResourcesController < ApplicationController
 
   # can also be called later
   authorize_by_jwt_subject_type "Organization"
-  authorize_by_jwt_scopes :resources, except: :destroy
+  authorize_by_jwt_scopes :resources, except: :destroy, if: -> { params["skip"].blank? }
   authorize_by_jwt_scopes :resources_destroy, only: [:destroy]
-
 
   def index
     render plain: "hello"
@@ -160,6 +159,13 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
     post "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
     assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+  end
+
+  test "success if if option is not fullfilled" do
+    token = generate_token
+    post "/resources", headers: { "Authorization" => "Bearer #{token}" }, params: { skip: "1" }
+    assert_response :success
+    assert_equal "hello", response.body
   end
 
   test "forbidden if token was blacklisted" do
