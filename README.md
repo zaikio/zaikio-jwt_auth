@@ -110,3 +110,28 @@ include Zaikio::JWTAuth::TestHelper
 # in your tests you can use:
 mock_jwt(sub: 'Organization/123', scope: ['directory.organization.r'])
 ```
+
+## Advanced
+
+### `only` and `except`
+
+Similar to Rails' controller callbacks, `authorize_by_jwt_scopes` can also be passed a list of actions:
+
+```rb
+class API::ResourcesController < API::ApplicationController
+  authorize_by_jwt_subject_type 'Organization'
+  authorize_by_jwt_scopes 'resources', except: :destroy
+  authorize_by_jwt_scopes 'remove_resources', only: [:destroy]
+end
+```
+
+
+### `if` and `unless`
+
+Similar to Rails' controller callbacks, `authorize_by_jwt_scopes` can also handle a lambda in the context of the controller to request parameters.
+
+```rb
+class API::ResourcesController < API::ApplicationController
+  authorize_by_jwt_scopes 'resources', unless: -> { params[:skip] == '1' }
+end
+```
