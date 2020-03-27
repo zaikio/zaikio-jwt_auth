@@ -18,6 +18,7 @@ module Zaikio
 
       def initialize
         @environment = :sandbox
+        @blacklisted_token_ids = nil
       end
 
       def logger

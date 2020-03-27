@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] = "test"
 
 require_relative "../test/dummy/config/environment"
 require "rails/test_help"
+require "mocha/minitest"
 require "webmock/minitest"
 
 # Filter out the backtrace from minitest while preserving the one from other libraries.
@@ -10,6 +11,8 @@ Minitest.backtrace_filter = Minitest::BacktraceFilter.new
 
 require "rails/test_unit/reporter"
 Rails::TestUnitReporter.executable = "bin/test"
+
+require_relative "../app/jobs/zaikio/jwt_auth/revoke_access_token_job"
 
 class ActiveSupport::TestCase
   include Zaikio::JWTAuth::TestHelper

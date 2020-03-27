@@ -5,6 +5,7 @@ require "zaikio/jwt_auth/configuration"
 require "zaikio/jwt_auth/directory_cache"
 require "zaikio/jwt_auth/jwk"
 require "zaikio/jwt_auth/token_data"
+require "zaikio/jwt_auth/engine"
 require "zaikio/jwt_auth/test_helper"
 
 module Zaikio
@@ -15,6 +16,12 @@ module Zaikio
 
     def self.configure
       self.configuration ||= Configuration.new
+
+      if Zaikio.const_defined?("Webhooks")
+        Zaikio::Webhooks.on "directory.revoked_access_token", Zaikio::JWTAuth::RevokeAccessTokenJob,
+                            perform_now: true
+      end
+
       yield(configuration)
     end
 

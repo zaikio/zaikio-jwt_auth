@@ -2,11 +2,9 @@
 
 Gem for JWT-Based authentication and authorization with zaikio.
 
-## Usage
-
 ## Installation
 
-1. Add this line to your application's Gemfile:
+### 1. Add this line to your application's Gemfile:
 
 ```ruby
 gem 'zaikio-jwt_auth'
@@ -22,7 +20,7 @@ Or install it yourself as:
 $ gem install zaikio-jwt_auth
 ```
 
-2. Configure the gem:
+### 2. Configure the gem:
 
 ```rb
 # config/initializers/zaikio_jwt_auth.rb
@@ -34,7 +32,7 @@ Zaikio::JWTAuth.configure do |config|
 end
 ```
 
-3. Extend your API application controller:
+### 3. Extend your API application controller:
 
 ```rb
 class API::ApplicationController < ActionController::Base
@@ -49,42 +47,12 @@ class API::ApplicationController < ActionController::Base
 end
 ```
 
-4. Update Revoked Access Tokens by Webhook
+### 4. Update Revoked Access Tokens by Webhook
 
-```rb
-# ENV['ZAIKIO_SHARED_SECRET'] needs to be defined first, you can find it on your
-# app details page in zaikio. Fore more help read:
-# https://docs.zaikio.com/guide/loom/receiving-events.html
-class WebhooksController < ActionController::Base
-  include Zaikio::JWTAuth
-
-  before_action :verify_signature
-  before_action :update_blacklisted_access_tokens_by_webhook
-
-  def create
-    case params[:name]
-      # Manage other events
-    end
-
-    render json: { received: true }
-  end
-
-  private
-
-  def verify_signature
-    # Read More: https://docs.zaikio.com/guide/loom/receiving-events.html
-    unless ActiveSupport::SecurityUtils.secure_compare(
-      OpenSSL::HMAC.hexdigest("SHA256", "shared-secret", request.body.read),
-      request.headers["X-Loom-Signature"]
-    )
-      render json: { received: true }
-    end
-  end
-end
-```
+This gem automatically registers a webhook, if you have properly setup [Zaikio::Webhooks](https://github.com/crispymtn/zaikio-webhooks).
 
 
-5. Add more restrictions to your resources:
+### 5. Add more restrictions to your resources:
 
 ```rb
 class API::ResourcesController < API::ApplicationController
@@ -93,7 +61,7 @@ class API::ResourcesController < API::ApplicationController
 end
 ```
 
-6. Optionally, if you are using SSO: Check revoked tokens
+### 6. Optionally, if you are using SSO: Check revoked tokens
 
 Additionally, the API provides a method called `revoked_jwt?` which expects the `jti` of the JWT.
 
@@ -101,7 +69,7 @@ Additionally, the API provides a method called `revoked_jwt?` which expects the 
 Zaikio::JWTAuth.revoked_jwt?('jti-of-token') # returns true if token was revoked
 ```
 
-7. Optionally, use the test helper module to mock JWTs in your minitests
+### 7. Optionally, use the test helper module to mock JWTs in your minitests
 
 ```rb
 # in your test_helper.rb
