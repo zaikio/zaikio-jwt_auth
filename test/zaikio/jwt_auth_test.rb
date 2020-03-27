@@ -22,6 +22,10 @@ class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
   end
 
   test "it is configurable" do
+    Zaikio::Webhooks.expects(:on).with("directory.revoked_access_token",
+                                       Zaikio::JWTAuth::RevokeAccessTokenJob,
+                                       perform_now: true)
+
     Zaikio::JWTAuth.configure do |config|
       config.environment = :test
       config.app_name = "test_app"
