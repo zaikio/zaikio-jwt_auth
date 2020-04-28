@@ -1,7 +1,7 @@
 module Zaikio
   module JWTAuth
     module TestHelper
-      def after_setup
+      def after_teardown
         Zaikio::JWTAuth.mocked_jwt_payload = nil
         super
       end

@@ -75,10 +75,23 @@ Zaikio::JWTAuth.revoked_jwt?('jti-of-token') # returns true if token was revoked
 
 ```rb
 # in your test_helper.rb
-include Zaikio::JWTAuth::TestHelper
+class ActiveSupport::TestCase
+  # ...
+  include Zaikio::JWTAuth::TestHelper
+  # ...
+end
 
-# in your tests you can use:
-mock_jwt(sub: 'Organization/123', scope: ['directory.organization.r'])
+# in your integration tests you can use:
+class ResourcesControllerTest < ActionDispatch::IntegrationTest
+  def setup
+    mock_jwt(sub: 'Organization/123', scope: ['directory.organization.r'])
+  end
+
+  test "do a request with a mocked jwt" do
+    get resources_path
+    # test the actual business logic
+  end
+end
 ```
 
 ## Advanced
