@@ -61,6 +61,8 @@ class API::ResourcesController < API::ApplicationController
 end
 ```
 
+By convention, `authorize_by_jwt_scopes` automatically maps all CRUD actions in a controller. Requests for `show` and `index` with a read or read_write scope are allowed. All other actions like `create`, `update` and `destroy` are accepted if the scope is a write or read_write scope. Therefore it is strongly recommended to always create standard Rails resources. If a custom action is required, you will need to authorize yourself using the `after_jwt_auth`.
+
 ### 6. Optionally, if you are using SSO: Check revoked tokens
 
 Additionally, the API provides a method called `revoked_jwt?` which expects the `jti` of the JWT.
