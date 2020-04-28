@@ -1,3 +1,3 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.acronym 'JWT'
+  inflect.acronym "JWT"
 end
