@@ -76,7 +76,7 @@ module Zaikio
 
         return if show_error_if_authorize_by_jwt_scopes_fails(token_data)
 
-        send(:after_jwt_auth, token_data) if respond_to?(:after_jwt_auth)
+        send(:after_jwt_auth, token_data) if respond_to?(:after_jwt_auth, true)
       rescue JWT::ExpiredSignature
         render_error("jwt_expired") && (return)
       rescue JWT::DecodeError
