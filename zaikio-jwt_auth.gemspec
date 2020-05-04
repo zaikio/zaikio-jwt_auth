@@ -7,8 +7,8 @@ require "zaikio/jwt_auth/version"
 Gem::Specification.new do |spec|
   spec.name        = "zaikio-jwt_auth"
   spec.version     = Zaikio::JWTAuth::VERSION
-  spec.authors     = ["Crispy Mountain GmbH"]
-  spec.email       = ["js@crispymtn.com"]
+  spec.authors     = ["crispymtn", "Jalyna Schröder", "Martin Spickermann"]
+  spec.email       = ["op@crispymtn.com", "js@crispymtn.com", "spickermann@gmail.com"]
   spec.homepage    = "https://www.zaikio.com/"
   spec.summary     = "JWT-Based authentication and authorization with zaikio"
   spec.description = "JWT-Based authentication and authorization with zaikio."
