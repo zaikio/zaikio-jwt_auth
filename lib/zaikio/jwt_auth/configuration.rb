@@ -31,7 +31,7 @@ module Zaikio
       end
 
       def keys
-        @keys.is_a?(Proc) ? @keys.call : @keys
+        defined?(@keys) && @keys.is_a?(Proc) ? @keys.call : @keys
       end
 
       def blacklisted_token_ids
