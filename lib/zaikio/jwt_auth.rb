@@ -32,9 +32,10 @@ module Zaikio
     def self.blacklisted_token_ids
       return [] if mocked_jwt_payload
 
-      return configuration.blacklisted_token_ids if configuration.blacklisted_token_ids
-
-      DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json", expires_after: 60.minutes)["blacklisted_token_ids"]
+      configuration.blacklisted_token_ids || DirectoryCache.fetch(
+        "api/v1/blacklisted_access_tokens.json",
+        expires_after: 60.minutes
+      )["blacklisted_token_ids"]
     end
 
     def self.included(base)
