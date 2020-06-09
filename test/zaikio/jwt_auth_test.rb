@@ -10,7 +10,7 @@ class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
 
     stub_requests
 
-    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/blacklisted_token_ids.json")
+    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/revoked_token_ids.json")
   end
 
   test "is a module" do
@@ -110,7 +110,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
 
     stub_requests
 
-    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/blacklisted_access_tokens.json")
+    Zaikio::JWTAuth::DirectoryCache.reset("api/v1/revoked_access_tokens.json")
 
     Rails.application.routes.draw do
       resources :resources
@@ -172,7 +172,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "hello", response.body
   end
 
-  test "forbidden if token was blacklisted" do
+  test "forbidden if token was revoked" do
     token = generate_token(jti: "very-bad-token")
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden

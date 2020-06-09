@@ -14,11 +14,11 @@ module Zaikio
       attr_accessor :app_name
       attr_accessor :redis, :host
       attr_reader :environment
-      attr_writer :logger, :blacklisted_token_ids, :keys
+      attr_writer :logger, :revoked_token_ids, :keys
 
       def initialize
         @environment = :sandbox
-        @blacklisted_token_ids = nil
+        @revoked_token_ids = nil
       end
 
       def logger
@@ -34,8 +34,8 @@ module Zaikio
         defined?(@keys) && @keys.is_a?(Proc) ? @keys.call : @keys
       end
 
-      def blacklisted_token_ids
-        @blacklisted_token_ids.is_a?(Proc) ? @blacklisted_token_ids.call : @blacklisted_token_ids
+      def revoked_token_ids
+        @revoked_token_ids.is_a?(Proc) ? @revoked_token_ids.call : @revoked_token_ids
       end
 
       private

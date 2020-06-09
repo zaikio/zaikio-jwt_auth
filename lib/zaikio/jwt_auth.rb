@@ -26,16 +26,16 @@ module Zaikio
     end
 
     def self.revoked_jwt?(jti)
-      blacklisted_token_ids.include?(jti)
+      revoked_token_ids.include?(jti)
     end
 
-    def self.blacklisted_token_ids
+    def self.revoked_token_ids
       return [] if mocked_jwt_payload
 
-      configuration.blacklisted_token_ids || DirectoryCache.fetch(
-        "api/v1/blacklisted_access_tokens.json",
+      configuration.revoked_token_ids || DirectoryCache.fetch(
+        "api/v1/revoked_access_tokens.json",
         expires_after: 60.minutes
-      )["blacklisted_token_ids"]
+      )["revoked_token_ids"]
     end
 
     def self.included(base)
@@ -71,7 +71,7 @@ module Zaikio
 
         token_data = TokenData.new(jwt_payload)
 
-        return if show_error_if_token_is_blacklisted(token_data)
+        return if show_error_if_token_is_revoked(token_data)
 
         return if show_error_if_authorize_by_jwt_subject_type_fails(token_data)
 
@@ -84,11 +84,11 @@ module Zaikio
         render_error("invalid_jwt") && (return)
       end
 
-      def update_blacklisted_access_tokens_by_webhook
+      def update_revoked_access_tokens_by_webhook
         return unless params[:name] == "directory.revoked_access_token"
 
-        DirectoryCache.update("api/v1/blacklisted_access_tokens.json", expires_after: 60.minutes) do |data|
-          data["blacklisted_token_ids"] << params[:payload][:access_token_id]
+        DirectoryCache.update("api/v1/revoked_access_tokens.json", expires_after: 60.minutes) do |data|
+          data["revoked_token_ids"] << params[:payload][:access_token_id]
           data
         end
 
@@ -131,7 +131,7 @@ module Zaikio
         render_error("unpermitted_subject")
       end
 
-      def show_error_if_token_is_blacklisted(token_data)
+      def show_error_if_token_is_revoked(token_data)
         return unless Zaikio::JWTAuth.revoked_jwt?(token_data.jti)
 
         render_error("invalid_jwt")

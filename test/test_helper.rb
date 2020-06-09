@@ -111,9 +111,9 @@ i15NDU2sOtIV5ZgaraNIP8o8+KybAdj15shKrsm3nFTJMLScg1KLOA==
         keys: [JWT::JWK::RSA.new(dummy_private_key.public_key).export]
       }.to_json)
 
-    stub_request(:get, "http://directory.zaikio.test/api/v1/blacklisted_access_tokens.json")
+    stub_request(:get, "http://directory.zaikio.test/api/v1/revoked_access_tokens.json")
       .to_return(status: 200, body: {
-        blacklisted_token_ids: %w[bad-token very-bad-token]
+        revoked_token_ids: %w[bad-token very-bad-token]
       }.to_json)
   end
 end

@@ -15,10 +15,10 @@ class Zaikio::JWTAuth::RevokeAccessTokenJobTest < ActiveSupport::TestCase
     Zaikio::JWTAuth::RevokeAccessTokenJob.new
   end
 
-  test "adds token to blacklisted ones" do
+  test "adds token to revoked ones" do
     event = OpenStruct.new(payload: { "access_token_id" => "my-webhook-token" })
     job.perform(event)
-    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/blacklisted_access_tokens.json")
-    assert_equal "my-webhook-token", cache["blacklisted_token_ids"].last
+    cache = Zaikio::JWTAuth::DirectoryCache.fetch("api/v1/revoked_access_tokens.json")
+    assert_equal "my-webhook-token", cache["revoked_token_ids"].last
   end
 end
