@@ -34,7 +34,7 @@ class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
 
     assert_equal :test,                   Zaikio::JWTAuth.configuration.environment
     assert_equal "test_app",              Zaikio::JWTAuth.configuration.app_name
-    assert_match "directory.zaikio.test", Zaikio::JWTAuth.configuration.host
+    assert_match "hub.zaikio.test", Zaikio::JWTAuth.configuration.host
     assert_not_nil Zaikio::JWTAuth.configuration.redis
   end
 

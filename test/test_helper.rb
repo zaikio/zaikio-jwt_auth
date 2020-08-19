@@ -98,7 +98,7 @@ i15NDU2sOtIV5ZgaraNIP8o8+KybAdj15shKrsm3nFTJMLScg1KLOA==
       jti: "unique-token-id",
       nbf: Time.now.to_i,
       exp: 1.hour.from_now.to_i,
-      jku: "http://directory.zaikio.test/api/v1/jwt_public_keys.json",
+      jku: "http://hub.zaikio.test/api/v1/jwt_public_keys.json",
       scope: ["directory.organization.r", "test_app.resources.r"]
     }.merge(extra_payload)
 
@@ -106,12 +106,12 @@ i15NDU2sOtIV5ZgaraNIP8o8+KybAdj15shKrsm3nFTJMLScg1KLOA==
   end
 
   def stub_requests
-    stub_request(:get, "http://directory.zaikio.test/api/v1/jwt_public_keys.json")
+    stub_request(:get, "http://hub.zaikio.test/api/v1/jwt_public_keys.json")
       .to_return(status: 200, body: {
         keys: [JWT::JWK::RSA.new(dummy_private_key.public_key).export]
       }.to_json)
 
-    stub_request(:get, "http://directory.zaikio.test/api/v1/revoked_access_tokens.json")
+    stub_request(:get, "http://hub.zaikio.test/api/v1/revoked_access_tokens.json")
       .to_return(status: 200, body: {
         revoked_token_ids: %w[bad-token very-bad-token]
       }.to_json)
