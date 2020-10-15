@@ -33,6 +33,10 @@ module Zaikio
         @payload["jti"]
       end
 
+      def expires_at
+        Time.at(@payload["exp"]).to_datetime
+      end
+
       # scope_options is an array of objects with:
       # scope, app_name (optional), except/only (array, optional)
       def scope_by_configurations?(scope_configurations, action_name, context)

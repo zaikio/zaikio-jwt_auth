@@ -85,6 +85,7 @@ class ResourcesController < ApplicationController
     klass = token_data.subject_type == "Organization" ? Organization : Person
     @scope = klass.find(token_data.subject_id) # Current.scope
     @audience = token_data.audience
+    @expires_at = token_data.expires_at
   end
 end
 
@@ -193,7 +194,8 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "is successful if correct JWT was passed" do
-    token = generate_token
+    exp = 1.hour.from_now
+    token = generate_token(exp: exp.to_i)
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :success
     assert_equal "hello", response.body
@@ -202,6 +204,8 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "123", scope.id
     audience = controller.instance_variable_get(:@audience)
     assert_equal "directory", audience
+    expires_at = controller.instance_variable_get(:@expires_at)
+    assert_equal exp.to_i, expires_at.to_i
   end
 
   test "successful if correct JWT was passed with other app name" do
