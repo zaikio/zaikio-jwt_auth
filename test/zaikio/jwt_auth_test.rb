@@ -101,7 +101,7 @@ class OtherAppResourcesController < ApplicationController
   end
 end
 
-class ResourcesControllerTest < ActionDispatch::IntegrationTest
+class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   def setup
     Zaikio::JWTAuth.configure do |config|
       config.environment = :test

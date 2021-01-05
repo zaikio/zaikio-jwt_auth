@@ -6,6 +6,7 @@ AllCops:
     - tmp/*
     - Rakefile
     - test/dummy/**/*
+    - vendor/bundle/**/*
   NewCops: disable
 
 require:

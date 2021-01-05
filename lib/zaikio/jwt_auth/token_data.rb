@@ -2,7 +2,7 @@ module Zaikio
   module JWTAuth
     class TokenData
       def self.subject_format
-        %r{^((\w+)/((\w|-)+)\>)?(\w+)/((\w|-)+)$}
+        %r{^((\w+)/((\w|-)+)>)?(\w+)/((\w|-)+)$}
       end
 
       def self.actions_by_permission
@@ -34,7 +34,7 @@ module Zaikio
       end
 
       def expires_at
-        Time.at(@payload["exp"]).to_datetime
+        Time.zone.at(@payload["exp"]).to_datetime
       end
 
       # scope_options is an array of objects with:
