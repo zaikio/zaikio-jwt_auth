@@ -11,8 +11,7 @@ module Zaikio
         production: "https://hub.zaikio.com"
       }.freeze
 
-      attr_accessor :app_name
-      attr_accessor :redis, :host
+      attr_accessor :app_name, :redis, :host
       attr_reader :environment
       attr_writer :logger, :revoked_token_ids, :keys
 
@@ -22,7 +21,7 @@ module Zaikio
       end
 
       def logger
-        @logger ||= Logger.new(STDOUT)
+        @logger ||= Logger.new($stdout)
       end
 
       def environment=(env)

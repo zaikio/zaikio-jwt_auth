@@ -16,6 +16,8 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
+  spec.required_ruby_version = ">= 2.6.5"
+
   spec.add_dependency "oj", ">= 3.0.0"
   spec.add_dependency "rails", ">= 5.0.0"
   # Authorization tokens
