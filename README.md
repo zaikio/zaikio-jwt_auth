@@ -49,7 +49,7 @@ end
 
 ### 4. Update Revoked Access Tokens by Webhook
 
-This gem automatically registers a webhook, if you have properly setup [Zaikio::Webhooks](https://github.com/crispymtn/zaikio-webhooks).
+This gem automatically registers a webhook, if you have properly setup [Zaikio::Webhooks](https://github.com/zaikio/zaikio-webhooks).
 
 
 ### 5. Add more restrictions to your resources:
