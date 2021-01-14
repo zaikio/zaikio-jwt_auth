@@ -13,7 +13,7 @@ require:
   - rubocop-performance
   - rubocop-rails
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 119 # line length on GitHub's PR pages
 
 Metrics/MethodLength:
