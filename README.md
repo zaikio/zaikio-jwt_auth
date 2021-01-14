@@ -118,3 +118,18 @@ class API::ResourcesController < API::ApplicationController
   authorize_by_jwt_scopes 'resources', unless: -> { params[:skip] == '1' }
 end
 ```
+
+### Usage outside a Rails controller
+
+If you need to access a JWT outside the normal Rails controllers (e.g. in a Rack
+middleware), there's a static helper method `.extract` which you can use:
+
+```ruby
+class MyRackMiddleware < Rack::Middleware
+  def call(env)
+    token = Zaikio::JWTAuth.extract(env["HTTP_AUTHORIZATION"])
+    puts token.subject_type #=> "Organization"
+    ...
+```
+
+This function expects to receive the string in the format `"Bearer $token"`.

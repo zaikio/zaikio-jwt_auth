@@ -125,6 +125,12 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_equal({ "errors" => ["no_jwt_passed"] }.to_json, response.body)
   end
 
+  test "unauthorized if not prefixed with `Bearer `" do
+    get "/resources", headers: { "Authorization" => generate_token }
+    assert_response :unauthorized
+    assert_equal({ "errors" => ["no_jwt_passed"] }.to_json, response.body)
+  end
+
   test "forbidden if invalid JWT was passed" do
     get "/resources", headers: { "Authorization" => "Bearer xxx" }
     assert_response :forbidden

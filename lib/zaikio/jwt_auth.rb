@@ -52,6 +52,20 @@ module Zaikio
       @mocked_jwt_payload = payload
     end
 
+    HEADER_FORMAT = /\ABearer (.+)\z/.freeze
+
+    def self.extract(authorization_header_string)
+      return TokenData.new(Zaikio::JWTAuth.mocked_jwt_payload) if Zaikio::JWTAuth.mocked_jwt_payload
+
+      return if authorization_header_string.blank?
+
+      return unless (token = authorization_header_string[HEADER_FORMAT, 1])
+
+      payload, = JWT.decode(token, nil, true, algorithms: ["RS256"], jwks: JWK.loader)
+
+      TokenData.new(payload)
+    end
+
     module ClassMethods
       def authorize_by_jwt_subject_type(type = nil)
         @authorize_by_jwt_subject_type ||= type
@@ -68,9 +82,8 @@ module Zaikio
 
     module InstanceMethods
       def authenticate_by_jwt
-        render_error("no_jwt_passed", status: :unauthorized) && return unless jwt_from_auth_header
-
-        token_data = TokenData.new(jwt_payload)
+        token_data = Zaikio::JWTAuth.extract(request.headers["Authorization"])
+        return render_error("no_jwt_passed", status: :unauthorized) unless token_data
 
         return if show_error_if_token_is_revoked(token_data)
 
@@ -97,21 +110,6 @@ module Zaikio
       end
 
       private
-
-      def jwt_from_auth_header
-        return true if Zaikio::JWTAuth.mocked_jwt_payload
-
-        auth_header = request.headers["Authorization"]
-        auth_header.split("Bearer ").last if /Bearer/.match?(auth_header)
-      end
-
-      def jwt_payload
-        return Zaikio::JWTAuth.mocked_jwt_payload if Zaikio::JWTAuth.mocked_jwt_payload
-
-        payload, = JWT.decode(jwt_from_auth_header, nil, true, algorithms: ["RS256"], jwks: JWK.loader)
-
-        payload
-      end
 
       def show_error_if_authorize_by_jwt_scopes_fails(token_data)
         return if token_data.scope_by_configurations?(
