@@ -18,6 +18,7 @@ module Zaikio
       def initialize
         @environment = :sandbox
         @revoked_token_ids = nil
+        @keys = nil
       end
 
       def logger
@@ -30,7 +31,7 @@ module Zaikio
       end
 
       def keys
-        defined?(@keys) && @keys.is_a?(Proc) ? @keys.call : @keys
+        @keys.is_a?(Proc) ? @keys.call : @keys
       end
 
       def revoked_token_ids
