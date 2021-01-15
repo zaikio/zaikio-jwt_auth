@@ -1,6 +1,6 @@
-version: 2
+version: 2.1
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/ruby:2.7.2
       - image: circleci/redis:3.2-alpine
@@ -31,3 +31,36 @@ jobs:
           name: run tests
           command: |
             bundle exec rake test
+
+  publish:
+    docker:
+      - image: circleci/ruby:2.7.2
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Build package
+          command: gem build zaikio-jwt_auth.gemspec
+      - run:
+          name: Push package
+          command: |
+            VERSION=$(ruby -r "./lib/zaikio/jwt_auth/version.rb" -e "print Zaikio::JWTAuth::VERSION")
+            gem push zaikio-jwt_auth-${VERSION}.gem
+workflows:
+  default:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - publish:
+          context:
+            - rubygems-push
+          requires: [test]
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

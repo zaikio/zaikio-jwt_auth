@@ -133,3 +133,17 @@ class MyRackMiddleware < Rack::Middleware
 ```
 
 This function expects to receive the string in the format `"Bearer $token"`.
+
+## Contributing
+
+**Make sure you have the dummy app running locally to validate your changes.**
+
+- Make your changes and submit a pull request for them
+- Make sure to update `CHANGELOG.md`
+
+To release a new version of the gem:
+- Update the version in `lib/zaikio/jwt_auth/version.rb`
+- Update `CHANGELOG.md` to include the new version and its release date
+- Commit and push your changes
+- Create a [new release on GitHub](https://github.com/zaikio/zaikio-jwt_auth/releases/new)
+- CircleCI will build the Gem package and push it Rubygems for you
