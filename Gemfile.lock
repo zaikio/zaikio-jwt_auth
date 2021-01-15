@@ -84,7 +84,7 @@ GEM
     i18n (1.8.7)
       concurrent-ruby (~> 1.0)
     jwt (2.2.2)
-    loofah (2.8.0)
+    loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -178,7 +178,7 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zaikio-webhooks (0.0.6)
+    zaikio-webhooks (0.0.7)
       rails (~> 6.0, >= 6.0.2.2)
     zeitwerk (2.4.2)
 
@@ -194,7 +194,7 @@ DEPENDENCIES
   rubocop-rails
   webmock
   zaikio-jwt_auth!
-  zaikio-webhooks (~> 0.0.6)
+  zaikio-webhooks (~> 0.0.7)
 
 BUNDLED WITH
    2.1.4
