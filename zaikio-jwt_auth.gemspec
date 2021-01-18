@@ -9,10 +9,15 @@ Gem::Specification.new do |spec|
   spec.version     = Zaikio::JWTAuth::VERSION
   spec.authors     = ["crispymtn", "Jalyna Schröder", "Martin Spickermann"]
   spec.email       = ["op@crispymtn.com", "js@crispymtn.com", "spickermann@gmail.com"]
-  spec.homepage    = "https://www.zaikio.com/"
+  spec.homepage    = "https://github.com/zaikio/zaikio-jwt_auth"
   spec.summary     = "JWT-Based authentication and authorization with zaikio"
   spec.description = "JWT-Based authentication and authorization with zaikio."
   spec.license     = "MIT"
+
+  if spec.respond_to?(:metadata)
+    spec.metadata["changelog_uri"] = "https://github.com/zaikio/zaikio-jwt_auth/blob/main/CHANGELOG.md"
+    spec.metadata["source_code_uri"] = "https://github.com/zaikio/zaikio-jwt_auth"
+  end
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
