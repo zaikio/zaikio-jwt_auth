@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gemspec
 
-gem "zaikio-webhooks", "~> 0.0.7"
+gem "zaikio-webhooks", "~> 0.0.9"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
