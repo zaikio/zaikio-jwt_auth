@@ -13,6 +13,14 @@ module Zaikio
         }.freeze
       end
 
+      def self.permissions_by_type
+        {
+          read: %w[r rw],
+          write: %w[rw w],
+          read_write: %w[r rw w]
+        }
+      end
+
       def initialize(payload)
         @payload = payload
       end
@@ -38,8 +46,8 @@ module Zaikio
       end
 
       # scope_options is an array of objects with:
-      # scope, app_name (optional), except/only (array, optional)
-      def scope_by_configurations?(scope_configurations, action_name, context)
+      # scope, app_name (optional), except/only (array, optional), type (read, write, readwrite)
+      def scope_by_configurations?(scope_configurations, action_name, context) # rubocop:disable Metrics/AbcSize
         configuration = scope_configurations.find do |scope_configuration|
           action_matches = action_matches_config?(scope_configuration, action_name)
 
@@ -54,7 +62,7 @@ module Zaikio
 
         return true unless configuration
 
-        scope?(configuration[:scopes], action_name, configuration[:app_name])
+        scope?(configuration[:scopes], action_name, app_name: configuration[:app_name], type: configuration[:type])
       end
 
       def action_matches_config?(scope_configuration, action_name)
@@ -67,14 +75,14 @@ module Zaikio
         end
       end
 
-      def scope?(allowed_scopes, action_name, app_name = nil)
+      def scope?(allowed_scopes, action_name, app_name: nil, type: nil)
         app_name ||= Zaikio::JWTAuth.configuration.app_name
         Array(allowed_scopes).map(&:to_s).any? do |allowed_scope|
           scope.any? do |s|
             parts = s.split(".")
             parts[0] == app_name &&
               parts[1] == allowed_scope &&
-              action_in_permission?(action_name, parts[2])
+              action_permitted?(action_name, parts[2], type: type)
           end
         end
       end
@@ -101,8 +109,14 @@ module Zaikio
 
       private
 
-      def action_in_permission?(action_name, permission)
-        self.class.actions_by_permission[permission].include?(action_name)
+      def action_permitted?(action_name, permission, type: nil)
+        if type
+          return false unless self.class.permissions_by_type.key?(type)
+
+          self.class.permissions_by_type[type].include?(permission)
+        else
+          self.class.actions_by_permission[permission].include?(action_name)
+        end
       end
     end
   end

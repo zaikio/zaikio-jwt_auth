@@ -66,8 +66,10 @@ class ResourcesController < ApplicationController
 
   # can also be called later
   authorize_by_jwt_subject_type "Organization"
-  authorize_by_jwt_scopes :resources, except: :destroy, if: -> { params["skip"].blank? }
+  authorize_by_jwt_scopes :resources, except: %i[destroy update], if: -> { params["skip"].blank? }
   authorize_by_jwt_scopes :resources_destroy, only: [:destroy]
+  authorize_by_jwt_scopes :resources, only: :update, type: :read
+  authorize_by_jwt_scopes :resources, only: :custom_action, type: :read
 
   def index
     render plain: "hello"
@@ -77,7 +79,15 @@ class ResourcesController < ApplicationController
     render plain: "hello"
   end
 
+  def update
+    render plain: "hello"
+  end
+
   def destroy
+    render plain: "destroy"
+  end
+
+  def custom_action
     render plain: "destroy"
   end
 
@@ -114,7 +124,9 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     Zaikio::JWTAuth::DirectoryCache.reset("api/v1/revoked_access_tokens.json")
 
     Rails.application.routes.draw do
-      resources :resources
+      resources :resources do
+        get :custom_route, params: { on: :collection }
+      end
       resources :other_app_resources
     end
   end
@@ -199,6 +211,27 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_response :success
   end
 
+  test "successful with custom type" do
+    token = generate_token
+
+    patch "/resources/123", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+  end
+
+  test "forbidden with unpermitted custom type" do
+    token = generate_token(scope: ["test_app.resources.w"])
+
+    patch "/resources/123", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :forbidden
+  end
+
+  test "successful with custom route" do
+    token = generate_token
+
+    patch "/resources/custom_route", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+  end
+
   test "is successful if correct JWT was passed" do
     exp = 1.hour.from_now
     token = generate_token(exp: exp.to_i)
@@ -220,7 +253,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_response :success
   end
 
-  test "forbissen if correct JWT was passed with wrong app name" do
+  test "forbidden if correct JWT was passed with wrong app name" do
     token = generate_token(
       scope: ["test_app.organization.r"]
     )
