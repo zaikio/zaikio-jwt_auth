@@ -17,7 +17,7 @@ module Zaikio
         {
           read: %w[r rw],
           write: %w[rw w],
-          readwrite: %w[r rw w]
+          read_write: %w[r rw w]
         }
       end
 
@@ -62,7 +62,7 @@ module Zaikio
 
         return true unless configuration
 
-        scope?(configuration[:scopes], action_name, configuration[:app_name], configuration[:type])
+        scope?(configuration[:scopes], action_name, app_name: configuration[:app_name], type: configuration[:type])
       end
 
       def action_matches_config?(scope_configuration, action_name)
@@ -75,14 +75,14 @@ module Zaikio
         end
       end
 
-      def scope?(allowed_scopes, action_name, app_name = nil, type = nil)
+      def scope?(allowed_scopes, action_name, app_name: nil, type: nil)
         app_name ||= Zaikio::JWTAuth.configuration.app_name
         Array(allowed_scopes).map(&:to_s).any? do |allowed_scope|
           scope.any? do |s|
             parts = s.split(".")
             parts[0] == app_name &&
               parts[1] == allowed_scope &&
-              action_permitted?(action_name, parts[2], type)
+              action_permitted?(action_name, parts[2], type: type)
           end
         end
       end
@@ -109,11 +109,11 @@ module Zaikio
 
       private
 
-      def action_permitted?(action_name, permission, type)
+      def action_permitted?(action_name, permission, type: nil)
         if type
           return false unless self.class.permissions_by_type.key?(type)
 
-          self.class.permissions_by_type[type]&.include?(permission)
+          self.class.permissions_by_type[type].include?(permission)
         else
           self.class.actions_by_permission[permission].include?(action_name)
         end

@@ -68,8 +68,8 @@ class ResourcesController < ApplicationController
   authorize_by_jwt_subject_type "Organization"
   authorize_by_jwt_scopes :resources, except: %i[destroy update], if: -> { params["skip"].blank? }
   authorize_by_jwt_scopes :resources_destroy, only: [:destroy]
-  authorize_by_jwt_scopes :resources, { only: :update, type: :read }
-  authorize_by_jwt_scopes :resources, { only: :custom_action, type: :read }
+  authorize_by_jwt_scopes :resources, only: :update, type: :read
+  authorize_by_jwt_scopes :resources, only: :custom_action, type: :read
 
   def index
     render plain: "hello"
