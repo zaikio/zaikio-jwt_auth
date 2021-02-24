@@ -152,7 +152,18 @@ class MyRackMiddleware < Rack::Middleware
     ...
 ```
 
-This function expects to receive the string in the format `"Bearer $token"`.
+This function expects to receive the string in the format `"Bearer $token"`. If the JWT is
+invalid, expired, or has some other fundamental issues, the JWT library may throw
+[additional errors](https://github.com/jwt/ruby-jwt/blob/v2.2.2/lib/jwt/error.rb), and you
+should be prepared to handle these, for example:
+
+```ruby
+def call(env)
+  token = Zaikio::JWTAuth.extract("definitely.not.jwt")
+rescue JWT::DecodeError, JWT::ExpiredSignature
+  [401, {}, ["Unauthorized"]]
+end
+```
 
 ## Contributing
 
