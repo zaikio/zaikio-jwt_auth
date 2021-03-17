@@ -18,7 +18,7 @@ module Zaikio
     def self.configure
       self.configuration ||= Configuration.new
 
-      if Zaikio.const_defined?("Webhooks")
+      if Zaikio.const_defined?("Webhooks", false)
         Zaikio::Webhooks.on "directory.revoked_access_token", Zaikio::JWTAuth::RevokeAccessTokenJob,
                             perform_now: true
       end
