@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gemspec
 
+gem "rails"
 gem "zaikio-webhooks", "~> 0.0.9"
 
 group :development, :test do
