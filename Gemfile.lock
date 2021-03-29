@@ -176,8 +176,9 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zaikio-webhooks (0.0.9)
-      rails (~> 6.0, >= 6.0.2.2)
+    zaikio-webhooks (0.0.10)
+      actionpack (~> 6.0, >= 6.0.2.2)
+      railties (~> 6.0, >= 6.0.2.2)
     zeitwerk (2.4.2)
 
 PLATFORMS
@@ -193,7 +194,7 @@ DEPENDENCIES
   rubocop-rails
   webmock
   zaikio-jwt_auth!
-  zaikio-webhooks (~> 0.0.9)
+  zaikio-webhooks (~> 0.0.10)
 
 BUNDLED WITH
    2.1.4
