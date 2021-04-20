@@ -5,6 +5,8 @@ require "logger"
 module Zaikio
   module JWTAuth
     class DirectoryCache
+      BadResponseError = Class.new(StandardError)
+
       class << self
         def fetch(directory_path, options = {})
           cache = Zaikio::JWTAuth.configuration.redis.get("zaikio::jwt_auth::#{directory_path}")
@@ -48,10 +50,10 @@ module Zaikio
             }.to_json)
 
             data
-          rescue Errno::ECONNREFUSED, Net::ReadTimeout => e
+          rescue Errno::ECONNREFUSED, Net::ReadTimeout, BadResponseError => e
             raise unless (retries += 1) <= 3
 
-            Zaikio::JWTAuth.configuration.logger.log("Timeout (#{e}), retrying in 1 second...")
+            Zaikio::JWTAuth.configuration.logger.info("Timeout (#{e}), retrying in 1 second...")
             sleep(1)
             retry
           end
@@ -59,7 +61,12 @@ module Zaikio
 
         def fetch_from_directory(directory_path)
           uri = URI("#{Zaikio::JWTAuth.configuration.host}/#{directory_path}")
-          Oj.load(Net::HTTP.get(uri))
+          http = Net::HTTP.new(uri.host, uri.port)
+          response = http.request(Net::HTTP::Get.new(uri.request_uri))
+          raise BadResponseError unless (200..299).cover?(response.code.to_i)
+          raise BadResponseError unless response["content-type"].to_s.include?("application/json")
+
+          Oj.load(response.body)
         end
       end
     end
