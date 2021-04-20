@@ -81,10 +81,10 @@ GEM
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     hashdiff (1.0.1)
-    i18n (1.8.9)
+    i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     jwt (2.2.3)
-    loofah (2.9.0)
+    loofah (2.9.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -96,7 +96,7 @@ GEM
     minitest (5.14.4)
     mocha (1.12.0)
     nio4r (2.5.7)
-    nokogiri (1.11.2)
+    nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     oj (3.11.5)
@@ -176,8 +176,9 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zaikio-webhooks (0.0.10)
+    zaikio-webhooks (0.0.11)
       actionpack (~> 6.0, >= 6.0.2.2)
+      activejob (~> 6.0, >= 6.0.2.2)
       railties (~> 6.0, >= 6.0.2.2)
     zeitwerk (2.4.2)
 
@@ -194,7 +195,7 @@ DEPENDENCIES
   rubocop-rails
   webmock
   zaikio-jwt_auth!
-  zaikio-webhooks (~> 0.0.10)
+  zaikio-webhooks (~> 0.0.11)
 
 BUNDLED WITH
    2.1.4
