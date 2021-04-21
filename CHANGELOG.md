@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2021-04-21
+
 * Throw a `Zaikio::JWTAuth::DirectoryCache::BadResponseError` when the server returns with
   an unexpected HTTP 4xx error code or non-JSON body.
 
@@ -26,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.4...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.4...v0.5.0
 [0.4.4]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.1...v0.4.2
