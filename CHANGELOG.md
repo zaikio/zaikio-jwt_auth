@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Throw a `Zaikio::JWTAuth::DirectoryCache::BadResponseError` when the server returns with
+  an unexpected HTTP 4xx error code or non-JSON body.
+
 ### [0.4.4] - 2020-03-25
 
  * Replace dependency on `rails` with a more specific dependency on `railties`

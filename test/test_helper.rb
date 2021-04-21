@@ -107,12 +107,12 @@ i15NDU2sOtIV5ZgaraNIP8o8+KybAdj15shKrsm3nFTJMLScg1KLOA==
 
   def stub_requests
     stub_request(:get, "http://hub.zaikio.test/api/v1/jwt_public_keys.json")
-      .to_return(status: 200, body: {
+      .to_return(status: 200, headers: { "Content-Type" => "application/json" }, body: {
         keys: [JWT::JWK::RSA.new(dummy_private_key.public_key).export]
       }.to_json)
 
     stub_request(:get, "http://hub.zaikio.test/api/v1/revoked_access_tokens.json")
-      .to_return(status: 200, body: {
+      .to_return(status: 200, headers: { "Content-Type" => "application/json" }, body: {
         revoked_token_ids: %w[bad-token very-bad-token]
       }.to_json)
   end
