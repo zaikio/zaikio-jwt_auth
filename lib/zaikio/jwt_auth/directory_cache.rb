@@ -62,6 +62,7 @@ module Zaikio
         def fetch_from_directory(directory_path)
           uri = URI("#{Zaikio::JWTAuth.configuration.host}/#{directory_path}")
           http = Net::HTTP.new(uri.host, uri.port)
+          http.use_ssl = uri.scheme == "https"
           response = http.request(Net::HTTP::Get.new(uri.request_uri))
           raise BadResponseError unless (200..299).cover?(response.code.to_i)
           raise BadResponseError unless response["content-type"].to_s.include?("application/json")
