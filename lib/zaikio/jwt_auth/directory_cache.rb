@@ -5,6 +5,13 @@ require "logger"
 module Zaikio
   module JWTAuth
     class DirectoryCache
+      class UpdateJob < ::ActiveJob::Base
+        def perform(directory_path)
+          DirectoryCache.fetch(directory_path)
+          true # This job will always re-queue until it succeeds.
+        end
+      end
+
       BadResponseError = Class.new(StandardError)
 
       class << self
@@ -14,7 +21,8 @@ module Zaikio
           json = Oj.load(cache) if cache
 
           if !cache || options[:invalidate] || cache_expired?(json, options[:expires_after])
-            return reload(directory_path)
+            new_values = reload_or_enqueue(directory_path)
+            return new_values || json["data"]
           end
 
           json["data"]
@@ -39,24 +47,18 @@ module Zaikio
           DateTime.strptime(json["fetched_at"].to_s, "%s") < Time.now.utc - (expires_after || 1.hour)
         end
 
-        def reload(directory_path)
-          retries = 0
+        def reload_or_enqueue(directory_path)
+          data = fetch_from_directory(directory_path)
+          Zaikio::JWTAuth.configuration.redis.set("zaikio::jwt_auth::#{directory_path}", {
+            fetched_at: Time.now.to_i,
+            data: data
+          }.to_json)
 
-          begin
-            data = fetch_from_directory(directory_path)
-            Zaikio::JWTAuth.configuration.redis.set("zaikio::jwt_auth::#{directory_path}", {
-              fetched_at: Time.now.to_i,
-              data: data
-            }.to_json)
-
-            data
-          rescue Errno::ECONNREFUSED, Net::ReadTimeout, BadResponseError => e
-            raise unless (retries += 1) <= 3
-
-            Zaikio::JWTAuth.configuration.logger.info("Timeout (#{e}), retrying in 1 second...")
-            sleep(1)
-            retry
-          end
+          data
+        rescue Errno::ECONNREFUSED, Net::ReadTimeout, BadResponseError
+          Zaikio::JWTAuth.configuration.logger.info("Error updating DirectoryCache(#{directory_path}), enqueueing job to update")
+          UpdateJob.set(wait: 10.seconds).perform_later(directory_path)
+          nil
         end
 
         def fetch_from_directory(directory_path)
