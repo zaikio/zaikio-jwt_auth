@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2021-04-23
+
 * **BREAKING** When updating the `DirectoryCache` (either using `invalidate: true` or when
   the cache expires), it will no longer retry & sleep, blocking the main thread.
   Instead, it enqueues a background job to attempt the update (and will re-queue again, if
@@ -37,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.1...v1.0.0
 [0.5.1]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.4...v0.5.0
 [0.4.4]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.3...v0.4.4
