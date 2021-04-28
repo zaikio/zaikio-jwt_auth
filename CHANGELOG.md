@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2021-04-28
+
+* Bugfix: add runtime dependency `activejob` for rebuilding the `DirectoryCache`
+
 ## [1.0.0] - 2021-04-23
 
 * **BREAKING** When updating the `DirectoryCache` (either using `invalidate: true` or when
