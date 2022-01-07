@@ -166,7 +166,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    thor (1.1.0)
+    thor (1.2.1)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.1.0)
@@ -177,11 +177,11 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zaikio-webhooks (0.0.11)
-      actionpack (~> 6.0, >= 6.0.2.2)
-      activejob (~> 6.0, >= 6.0.2.2)
-      railties (~> 6.0, >= 6.0.2.2)
-    zeitwerk (2.5.1)
+    zaikio-webhooks (0.1.0)
+      actionpack (>= 6.0.2.2, < 8)
+      activejob (>= 6.0.2.2, < 8)
+      railties (>= 6.0.2.2, < 8)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby
@@ -196,7 +196,7 @@ DEPENDENCIES
   rubocop-rails
   webmock
   zaikio-jwt_auth!
-  zaikio-webhooks (~> 0.0.11)
+  zaikio-webhooks (~> 0.1.0)
 
 BUNDLED WITH
    2.1.4
