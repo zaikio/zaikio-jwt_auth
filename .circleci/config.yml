@@ -5,7 +5,7 @@ jobs:
       - image: cimg/ruby:3.1.2
         environment:
           BUNDLE_PATH: vendor/bundle
-      - image: circleci/redis:3.2-alpine
+      - image: cimg/redis:6.2
 
     working_directory: ~/repo
 
