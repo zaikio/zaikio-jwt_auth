@@ -63,6 +63,24 @@ end
 
 By convention, `authorize_by_jwt_scopes` automatically maps all CRUD actions in a controller. Requests for `show` and `index` with a read or read_write scope are allowed. All other actions like `create`, `update` and `destroy` are accepted if the scope is a write or read_write scope. Therefore it is strongly recommended to always create standard Rails resources. If a custom action is required, you will need to authorize yourself using the `after_jwt_auth`.
 
+Both of these behaviours are automatically inherited by child classes, for example:
+
+```ruby
+class API::ChildController < API::ResourcesController
+end
+
+API::ChildController.authorize_by_jwt_subject_type
+#=> "Organization"
+```
+
+You can always override the behaviour in children if needed:
+
+```ruby
+class API::ChildController < API::ResourcesController
+  authorize_by_jwt_subject_type nil
+end
+```
+
 #### Modifying required scopes
 If you nonetheless want to change the required scopes for CRUD routes, you can use the `type` option which accepts the following values: `:read`, `:write`, `:read_write`
 

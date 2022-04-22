@@ -261,4 +261,35 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_response :forbidden
     assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
   end
+
+  test ".authorize_by_jwt_subject_type can be set multiple times and even cleared" do
+    controller = Class.new(ApplicationController) do
+      include Zaikio::JWTAuth
+    end
+
+    controller.authorize_by_jwt_subject_type "Organization"
+    controller.authorize_by_jwt_subject_type "Person"
+
+    assert_equal "Person", controller.authorize_by_jwt_subject_type
+
+    controller.authorize_by_jwt_subject_type nil
+    assert_nil controller.authorize_by_jwt_subject_type
+  end
+
+  test ".authorize_by_jwt_subject_type is inherited by child classes" do
+    child = Class.new(ResourcesController)
+    assert_equal "Organization", child.authorize_by_jwt_subject_type
+
+    other = Class.new(OtherAppResourcesController)
+    assert_nil other.authorize_by_jwt_subject_type
+  end
+
+  test ".authorize_by_jwt_scopes is inherited by child classes" do
+    child = Class.new(ResourcesController)
+    assert_equal ResourcesController.authorize_by_jwt_scopes, child.authorize_by_jwt_scopes
+
+    other = Class.new(OtherAppResourcesController)
+    assert_equal [{ app_name: "directory", scopes: :organization }],
+                 other.authorize_by_jwt_scopes
+  end
 end

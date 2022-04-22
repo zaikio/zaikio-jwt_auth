@@ -45,7 +45,7 @@ module Zaikio
     end
 
     def self.mocked_jwt_payload
-      @mocked_jwt_payload
+      instance_variable_defined?(:@mocked_jwt_payload) && @mocked_jwt_payload
     end
 
     def self.mocked_jwt_payload=(payload)
@@ -67,8 +67,12 @@ module Zaikio
     end
 
     module ClassMethods
-      def authorize_by_jwt_subject_type(type = nil)
-        @authorize_by_jwt_subject_type ||= type
+      def authorize_by_jwt_subject_type(type = :_not_given_)
+        if type != :_not_given_
+          @authorize_by_jwt_subject_type = type
+        elsif instance_variable_defined?(:@authorize_by_jwt_subject_type)
+          @authorize_by_jwt_subject_type
+        end
       end
 
       def authorize_by_jwt_scopes(scopes = nil, options = {})
@@ -77,6 +81,13 @@ module Zaikio
         @authorize_by_jwt_scopes << options.merge(scopes: scopes) if scopes
 
         @authorize_by_jwt_scopes
+      end
+
+      def inherited(child)
+        super(child)
+
+        child.instance_variable_set(:@authorize_by_jwt_subject_type, @authorize_by_jwt_subject_type)
+        child.instance_variable_set(:@authorize_by_jwt_scopes, @authorize_by_jwt_scopes)
       end
     end
 
