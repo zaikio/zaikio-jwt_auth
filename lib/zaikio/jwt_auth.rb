@@ -67,8 +67,12 @@ module Zaikio
     end
 
     module ClassMethods
-      def authorize_by_jwt_subject_type(type = nil)
-        @authorize_by_jwt_subject_type ||= type
+      def authorize_by_jwt_subject_type(type = :_not_given_)
+        if type != :_not_given_
+          @authorize_by_jwt_subject_type = type
+        elsif instance_variable_defined?(:@authorize_by_jwt_subject_type)
+          @authorize_by_jwt_subject_type
+        end
       end
 
       def authorize_by_jwt_scopes(scopes = nil, options = {})

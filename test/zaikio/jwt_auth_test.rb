@@ -261,4 +261,18 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_response :forbidden
     assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
   end
+
+  test ".authorize_by_jwt_subject_type can be set multiple times and even cleared" do
+    controller = Class.new(ApplicationController) do
+      include Zaikio::JWTAuth
+    end
+
+    controller.authorize_by_jwt_subject_type "Organization"
+    controller.authorize_by_jwt_subject_type "Person"
+
+    assert_equal "Person", controller.authorize_by_jwt_subject_type
+
+    controller.authorize_by_jwt_subject_type nil
+    assert_nil controller.authorize_by_jwt_subject_type
+  end
 end
