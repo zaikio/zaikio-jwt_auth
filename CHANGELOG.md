@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2022-04-21
+
 * After setting `authorize_by_jwt_subject_type` and `authorize_by_jwt_scopes` in a
   controller, any classes inheriting from your controller will also get a copy of those
   attributes. You can override this behaviour by calling the methods again in the child
@@ -48,7 +50,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.2...HEAD
+[1.0.1]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.1...v1.0.0
 [0.5.1]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/zaikio/zaikio-directory-models/compare/v0.4.4...v0.5.0
