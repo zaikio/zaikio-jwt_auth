@@ -82,6 +82,13 @@ module Zaikio
 
         @authorize_by_jwt_scopes
       end
+
+      def inherited(child)
+        super(child)
+
+        child.instance_variable_set(:@authorize_by_jwt_subject_type, @authorize_by_jwt_subject_type)
+        child.instance_variable_set(:@authorize_by_jwt_scopes, @authorize_by_jwt_scopes)
+      end
     end
 
     module InstanceMethods

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* After setting `authorize_by_jwt_subject_type` and `authorize_by_jwt_scopes` in a
+  controller, any classes inheriting from your controller will also get a copy of those
+  attributes. You can override this behaviour by calling the methods again in the child
+  class.
+
 ## [1.0.1] - 2021-04-28
 
 * Bugfix: add runtime dependency `activejob` for rebuilding the `DirectoryCache`
