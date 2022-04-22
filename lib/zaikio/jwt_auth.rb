@@ -45,7 +45,7 @@ module Zaikio
     end
 
     def self.mocked_jwt_payload
-      @mocked_jwt_payload
+      instance_variable_defined?(:@mocked_jwt_payload) && @mocked_jwt_payload
     end
 
     def self.mocked_jwt_payload=(payload)
