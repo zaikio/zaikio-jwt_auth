@@ -247,6 +247,13 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_equal exp.to_i, expires_at.to_i
   end
 
+  test "is successful if JWT signed with second JWK is passed" do
+    token = generate_token({}, second_dummy_private_key)
+    get "/resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+    assert_equal "hello", response.body
+  end
+
   test "successful if correct JWT was passed with other app name" do
     token = generate_token
     get "/other_app_resources", headers: { "Authorization" => "Bearer #{token}" }

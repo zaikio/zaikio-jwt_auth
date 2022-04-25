@@ -53,6 +53,39 @@ S7y/D9aF96X6pnnSOZz2GcK7T0eLAsKgYOnAKRXUvo1jG0MgktB51Q==
     ).freeze
   end
 
+  def second_dummy_private_key
+    OpenSSL::PKey::RSA.new(
+      "-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEA4mEy65t+kRppssLLNkZ6yIfVkKg/Fx+2AYtpK50f6xY2bF8m
+dp9OZpNXNvSu++y8Ok/6puEzl338Dtu1WrHopNHekxYj6QWAYG4fjtUtU0CVk3Zx
+ssmmqc0NeEYJsoOox3hcDv4IkLpMeQxOeDVGA60vSqRS+LzlNSF4E72LzW3B3jJF
+Ft6udA18HlijNl1o+YscSYDFBDuFsJVm6MEIImvy15heoqc9M5nZ5F2jaTBKVFi2
+PdsZCVWce7wSP2V95hDw2YhazgkHZx4pjsaxXG/9rYS6NjHll2isW0boB1MeVUxO
+9A56W44Vst/9yypL0JdZVfgXq+PDomjY9FWnAQIDAQABAoIBAHOcCgIy5d86qvIk
+8tyj/757SEDY+2dWxX9ib/JbCtrm/CI6MY1w6/wMkQS6zsZPbw0knTAuYEekil4Y
+LDTGGLZbi5x4ORyet6IHe0xZaA1VNU4athQFUXz0AEYFFpy5Ci/cMr9hUoR+7+D9
+vPE826WzAyzOYKUw6qlIj2cdbNEan1hKz/tl1gi9gfLANkyhR+yqSR4VENKdvUnU
+N/yBWJ0KoHhjLbuMIog0F9P7ePc7gAtsdT1/+dQZFG0qGUOUpCKja2R6ipSFvpng
+ENhK7EtqRgqN9cvDU7Dw8r11xxLexgnLo3QSHwg2bea343Y79i9ni7ZskonkDyQW
+2aq3zjUCgYEA+TJMEoeCwzpnWoAATrabPZssmiOvtyiC+YTPLtRqNnhx9vU9m6sc
+eYqJWySTe944rJQtLw7tL2GeaNnC7B5aNxj91t6rRJ8XvM0vYKZusFmibH85qOYb
+4uozPORvvYXdw9dnV/40sHTvVPLpJYj4HZ3iIyXGkDH9x6oEdmX/NscCgYEA6I9t
+zV0lR5ie7bA6FBLnKanQ5h2Zr0hOvdDBq12FXn3yoSNNw+b3zF6wkBDN30lGc3P3
+2OOMT4Wvv2gBjzYxo0gKjrXJhTi1KacjIsOGHU8mUD5Fjsl4+7ytcOI/5d4Qfwas
+h4iqmChfubJMHOvp3WZ4RbFXqrAhxnUpGbgYy/cCgYABEI3yplGQs/ctE87shysy
+oC8YmX5useWdW0vnT1EE2o7iFzokKB7/BfCASy+2H8TuN9PZl567zRb4K7YBfD+2
+bIzpFhp1OJjJXbcOGqfuaPOgswp0BkeoOIfvgqpXjPLdm1X9skBXYKiFHGSSnHsy
+5THKJKcshoonCDrsppLokQKBgQCB+ceQg4KWZUJN7bRIC9iOfI54Tgra4DrB866K
+LBaiHRpB3Q1Vc/0Ch9l+ayXkqXtqg2H+Ig8FUt5Kx8I3XD6Z12WvJQKgJnV59iO5
+BjYqo1Xyexs9FnU7nNQCxzCXNGlb1UsP5N4TdF0r1+6aK2/lgaOur9MjXpVB6bEy
+4qVZOQKBgD34QX8d18C184lF21sTWRDdXt7y9JYxgIjvxFXIE+t6us+bGSr2TpeM
+BR8KIkR3uDMFHChtNmlK3LClThCSu6WlS0kC1wPQlkWpSuX0+xXIqc7z6KbzDfg1
+Ns5b9DQjWE1qg3Pca2Az6BCbBcgQSHtS67BCdOfpykGVXe2M5TDY
+-----END RSA PRIVATE KEY-----",
+      "abc"
+    ).freeze
+  end
+
   def other_dummy_private_key
     OpenSSL::PKey::RSA.new(
       "-----BEGIN RSA PRIVATE KEY-----
@@ -108,7 +141,10 @@ i15NDU2sOtIV5ZgaraNIP8o8+KybAdj15shKrsm3nFTJMLScg1KLOA==
   def stub_requests
     stub_request(:get, "http://hub.zaikio.test/api/v1/jwt_public_keys.json")
       .to_return(status: 200, headers: { "Content-Type" => "application/json" }, body: {
-        keys: [JWT::JWK::RSA.new(dummy_private_key.public_key).export]
+        keys: [
+          JWT::JWK::RSA.new(dummy_private_key.public_key).export,
+          JWT::JWK::RSA.new(second_dummy_private_key.public_key).export
+        ]
       }.to_json)
 
     stub_request(:get, "http://hub.zaikio.test/api/v1/revoked_access_tokens.json")
