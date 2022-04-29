@@ -11,7 +11,7 @@ module Zaikio
         production: "https://hub.zaikio.com"
       }.freeze
 
-      attr_accessor :app_name, :redis, :host
+      attr_accessor :app_name, :cache, :host
       attr_reader :environment
       attr_writer :logger, :revoked_token_ids, :keys
 

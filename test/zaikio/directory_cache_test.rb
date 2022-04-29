@@ -5,6 +5,7 @@ module Zaikio::JWTAuth
     def setup
       Zaikio::JWTAuth.configure do |config|
         config.environment = :test
+        config.cache = ActiveSupport::Cache::RedisCacheStore.new
       end
     end
 

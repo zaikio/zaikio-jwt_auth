@@ -28,7 +28,9 @@ $ gem install zaikio-jwt_auth
 Zaikio::JWTAuth.configure do |config|
   config.environment = :sandbox # or production
   config.app_name = "test_app" # Your Zaikio App-Name
-  config.redis = Redis.new
+
+  # Enable caching Hub API responses for e.g. revoked tokens
+  config.cache = Rails.cache
 end
 ```
 
@@ -182,6 +184,13 @@ rescue JWT::DecodeError, JWT::ExpiredSignature
   [401, {}, ["Unauthorized"]]
 end
 ```
+
+### Using a different cache backend
+
+This client supports any implementation of
+[`ActiveSupport::Cache::Store`](https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html),
+but you can also write your own client that supports these methods: `#read(key)`,
+`#write(key, value)`, `#delete(key)`
 
 ## Contributing
 
