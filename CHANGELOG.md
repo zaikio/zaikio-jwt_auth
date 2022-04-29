@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2022-04-29
+
 * **BREAKING** `config.redis` has been replaced with `config.cache`, replacing the
   direct Redis dependency with an instance of a `ActiveSupport::Cache::Store`. If you
   wish to keep using Redis, you should wrap it like so:
@@ -66,8 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.2...HEAD
-[1.0.1]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.1...v1.0.2
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.2...v2.0.0
+[1.0.2]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.1...v1.0.0
 [0.5.1]: https://github.com/zaikio/zaikio-directory-models/compare/v0.5.0...v0.5.1
