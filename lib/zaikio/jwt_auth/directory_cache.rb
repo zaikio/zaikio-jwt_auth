@@ -16,7 +16,7 @@ module Zaikio
 
       class << self
         def fetch(directory_path, options = {})
-          cache = Zaikio::JWTAuth.configuration.redis.get("zaikio::jwt_auth::#{directory_path}")
+          cache = Zaikio::JWTAuth.configuration.cache.read("zaikio::jwt_auth::#{directory_path}")
 
           json = Oj.load(cache) if cache
 
@@ -31,14 +31,14 @@ module Zaikio
         def update(directory_path, options = {})
           data = fetch(directory_path, options)
           data = yield(data)
-          Zaikio::JWTAuth.configuration.redis.set("zaikio::jwt_auth::#{directory_path}", {
+          Zaikio::JWTAuth.configuration.cache.write("zaikio::jwt_auth::#{directory_path}", {
             fetched_at: Time.now.to_i,
             data: data
           }.to_json)
         end
 
         def reset(directory_path)
-          Zaikio::JWTAuth.configuration.redis.del("zaikio::jwt_auth::#{directory_path}")
+          Zaikio::JWTAuth.configuration.cache.delete("zaikio::jwt_auth::#{directory_path}")
         end
 
         private
@@ -49,7 +49,7 @@ module Zaikio
 
         def reload_or_enqueue(directory_path)
           data = fetch_from_directory(directory_path)
-          Zaikio::JWTAuth.configuration.redis.set("zaikio::jwt_auth::#{directory_path}", {
+          Zaikio::JWTAuth.configuration.cache.write("zaikio::jwt_auth::#{directory_path}", {
             fetched_at: Time.now.to_i,
             data: data
           }.to_json)

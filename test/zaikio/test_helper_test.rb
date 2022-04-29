@@ -41,7 +41,7 @@ class TestHelperTest < ActionDispatch::IntegrationTest
     Zaikio::JWTAuth.configure do |config|
       config.environment = :test
       config.app_name = "test_app"
-      config.redis = Redis.new
+      config.cache = ActiveSupport::Cache::RedisCacheStore.new
     end
 
     Rails.application.routes.draw do

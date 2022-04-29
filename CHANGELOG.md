@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* **BREAKING** `config.redis` has been replaced with `config.cache`, replacing the
+  direct Redis dependency with an instance of a `ActiveSupport::Cache::Store`. If you
+  wish to keep using Redis, you should wrap it like so:
+
+```diff
+-config.redis = Redis.new
++config.cache = ActiveSupport::Cache::RedisCacheStore.new
+```
+
+  Alternatively, you can also use `Rails.cache` to use a different backend:
+
+```diff
+-config.redis = Redis.new
++config.cache = Rails.cache
+```
+
 ## [1.0.2] - 2022-04-21
 
 * After setting `authorize_by_jwt_subject_type` and `authorize_by_jwt_scopes` in a

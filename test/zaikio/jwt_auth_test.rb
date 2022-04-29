@@ -5,7 +5,7 @@ class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
     Zaikio::JWTAuth.configure do |config|
       config.environment = :test
       config.app_name = "test_app"
-      config.redis = Redis.new
+      config.cache = ActiveSupport::Cache::RedisCacheStore.new
     end
 
     stub_requests
@@ -29,13 +29,13 @@ class Zaikio::JWTAuth::Test < ActiveSupport::TestCase
     Zaikio::JWTAuth.configure do |config|
       config.environment = :test
       config.app_name = "test_app"
-      config.redis = Redis.new
+      config.cache = ActiveSupport::Cache::RedisCacheStore.new
     end
 
     assert_equal :test,                   Zaikio::JWTAuth.configuration.environment
     assert_equal "test_app",              Zaikio::JWTAuth.configuration.app_name
     assert_match "hub.zaikio.test", Zaikio::JWTAuth.configuration.host
-    assert_not_nil Zaikio::JWTAuth.configuration.redis
+    assert_not_nil Zaikio::JWTAuth.configuration.cache
   end
 
   test "revoked_jwt?" do
@@ -116,7 +116,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     Zaikio::JWTAuth.configure do |config|
       config.environment = :test
       config.app_name = "test_app"
-      config.redis = Redis.new
+      config.cache = ActiveSupport::Cache::RedisCacheStore.new
     end
 
     stub_requests
