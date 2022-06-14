@@ -154,7 +154,7 @@ GEM
     rubocop-performance (1.14.2)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.14.2)
+    rubocop-rails (2.15.0)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
@@ -181,7 +181,7 @@ GEM
       actionpack (>= 6.0.2.2, < 8)
       activejob (>= 6.0.2.2, < 8)
       railties (>= 6.0.2.2, < 8)
-    zeitwerk (2.5.4)
+    zeitwerk (2.6.0)
 
 PLATFORMS
   ruby
