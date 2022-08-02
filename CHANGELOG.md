@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Added support for `jwt_options` in controller to customize JWT options
+
 ## [2.0.0] - 2022-04-29
 
 * **BREAKING** `config.redis` has been replaced with `config.cache`, replacing the

@@ -97,6 +97,12 @@ class ResourcesController < ApplicationController
     @audience = token_data.audience
     @expires_at = token_data.expires_at
   end
+
+  def jwt_options
+    return {} unless params[:allow_expired] == "1"
+
+    { verify_expiration: false }
+  end
 end
 
 class OtherAppResourcesController < ApplicationController
@@ -154,6 +160,13 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
     assert_equal({ "errors" => ["jwt_expired"] }.to_json, response.body)
+  end
+
+  test "success if JWT expired but jwt_options were set to allow it" do
+    token = generate_token(exp: 1.hour.ago.to_i)
+    get "/resources", headers: { "Authorization" => "Bearer #{token}" }, params: { allow_expired: "1" }
+    assert_response :success
+    assert_equal "hello", response.body
   end
 
   test "forbidden if invalid signature" do

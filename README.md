@@ -192,6 +192,18 @@ This client supports any implementation of
 but you can also write your own client that supports these methods: `#read(key)`,
 `#write(key, value)`, `#delete(key)`
 
+### Pass custom options to JWT auth
+
+In some cases you want to add custom options to the JWT check. For example you want to allow expired JWTs when revoking access tokens.
+
+```rb
+class API::RevokedAccessTokensController < API::ApplicationController
+  def jwt_options
+    { verify_expiration: false }
+  end
+end
+```
+
 ## Contributing
 
 **Make sure you have the dummy app running locally to validate your changes.**

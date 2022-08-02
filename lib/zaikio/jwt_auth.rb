@@ -54,14 +54,16 @@ module Zaikio
 
     HEADER_FORMAT = /\ABearer (.+)\z/.freeze
 
-    def self.extract(authorization_header_string)
+    def self.extract(authorization_header_string, **options)
       return TokenData.new(Zaikio::JWTAuth.mocked_jwt_payload) if Zaikio::JWTAuth.mocked_jwt_payload
 
       return if authorization_header_string.blank?
 
       return unless (token = authorization_header_string[HEADER_FORMAT, 1])
 
-      payload, = JWT.decode(token, nil, true, algorithms: ["RS256"], jwks: JWK.loader)
+      options.reverse_merge!(algorithms: ["RS256"], jwks: JWK.loader)
+
+      payload, = JWT.decode(token, nil, true, **options)
 
       TokenData.new(payload)
     end
@@ -93,7 +95,7 @@ module Zaikio
 
     module InstanceMethods
       def authenticate_by_jwt
-        token_data = Zaikio::JWTAuth.extract(request.headers["Authorization"])
+        token_data = Zaikio::JWTAuth.extract(request.headers["Authorization"], **jwt_options)
         return render_error("no_jwt_passed", status: :unauthorized) unless token_data
 
         return if show_error_if_token_is_revoked(token_data)
@@ -149,6 +151,10 @@ module Zaikio
 
       def render_error(error, status: :forbidden)
         render(status: status, json: { "errors" => [error] })
+      end
+
+      def jwt_options
+        {}
       end
     end
   end
