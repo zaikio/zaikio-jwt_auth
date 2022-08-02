@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2022-08-02
+
 * Added support for `jwt_options` in controller to customize JWT options
 
 ## [2.0.0] - 2022-04-29
@@ -70,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.0...v1.0.1
