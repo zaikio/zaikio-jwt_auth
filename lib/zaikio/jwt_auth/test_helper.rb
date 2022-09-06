@@ -11,7 +11,7 @@ module Zaikio
           iss: "ZAI",
           sub: nil,
           aud: %w[test_app],
-          jti: "unique-access-token-id",
+          jti: SecureRandom.uuid,
           nbf: Time.now.to_i,
           exp: 1.hour.from_now.to_i,
           jku: "http://hub.zaikio.test/api/v1/jwt_public_keys.json",
