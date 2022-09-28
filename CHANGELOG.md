@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2022-09-28
+
 * Added rack Middleware for rack-attack throttling
 
 ## [2.1.1] - 2022-09-06
@@ -78,7 +80,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.1...v2.2.0
+[2.1.1]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/zaikio/zaikio-directory-models/compare/v1.0.1...v1.0.2

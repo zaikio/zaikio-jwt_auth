@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zaikio-jwt_auth (2.1.1)
+    zaikio-jwt_auth (2.2.0)
       activejob
       jwt (>= 2.2.1)
       oj (>= 3.0.0)
