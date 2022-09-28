@@ -6,6 +6,7 @@ require "zaikio/jwt_auth/configuration"
 require "zaikio/jwt_auth/directory_cache"
 require "zaikio/jwt_auth/jwk"
 require "zaikio/jwt_auth/token_data"
+require "zaikio/jwt_auth/rack_middleware"
 require "zaikio/jwt_auth/engine"
 require "zaikio/jwt_auth/test_helper"
 

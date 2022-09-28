@@ -28,3 +28,4 @@ module Dummy
   end
 end
 
+Dummy::Application.config.middleware.insert_after ActionDispatch::ContentSecurityPolicy::Middleware, Zaikio::JWTAuth::RackMiddleware

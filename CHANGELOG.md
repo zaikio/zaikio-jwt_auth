@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Added rack Middleware for rack-attack throttling
+
 ## [2.1.1] - 2022-09-06
 
 * Mocked JWTs now contain actual random UUIDs instead of a fixed string

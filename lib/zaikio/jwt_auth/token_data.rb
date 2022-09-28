@@ -95,6 +95,10 @@ module Zaikio
         subject_match[5]
       end
 
+      def subject
+        "#{subject_type}/#{subject_id}"
+      end
+
       def on_behalf_of_id
         subject_match[3]
       end

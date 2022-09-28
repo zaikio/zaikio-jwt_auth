@@ -14,7 +14,7 @@ Rails::TestUnitReporter.executable = "bin/test"
 
 require_relative "../app/jobs/zaikio/jwt_auth/revoke_access_token_job"
 
-class ActiveSupport::TestCase
+class ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
   include Zaikio::JWTAuth::TestHelper
 
   def dummy_private_key

@@ -134,6 +134,27 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest
 end
 ```
 
+### 8. Setup rack-attack for throttling
+
+This gem ships with a rack middleware that should be used to throttle requests by app and/or subject. You can use the middleware with [rack-attack](https://github.com/rack/rack-attack) as described here:
+
+```rb
+# config/initializers/rack_attack.rb
+
+MyApp::Application.config.middleware.insert_before Rack::Attack, Zaikio::JWTAuth::RackMiddleware
+
+class Rack::Attack
+  Rack::Attack.throttled_response_retry_after_header = true
+
+  throttle("zaikio/by_app_sub", limit: 600, period: 1.minute) do |request|
+    next unless request.path.start_with?("/api/")
+    next unless request.env[Zaikio::JWTAuth::RackMiddleware::SUBJECT] # does not use zaikio JWT
+
+    "#{request.env[Zaikio::JWTAuth::RackMiddleware::AUDIENCE]}/#{request.env[Zaikio::JWTAuth::RackMiddleware::SUBJECT]}"
+  end
+end
+```
+
 ## Advanced
 
 ### `only` and `except`
