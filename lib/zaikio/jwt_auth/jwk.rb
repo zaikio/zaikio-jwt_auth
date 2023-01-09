@@ -30,7 +30,7 @@ module Zaikio
         def keys
           return Zaikio::JWTAuth.configuration.keys if Zaikio::JWTAuth.configuration.keys
 
-          fetch_from_cache["keys"]
+          fetch_from_cache.fetch("keys")
         end
 
         def fetch_from_cache(options = {})

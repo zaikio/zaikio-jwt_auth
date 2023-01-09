@@ -61,5 +61,14 @@ module Zaikio::JWTAuth
         DirectoryCache.fetch("foo.json")
       )
     end
+
+    test "if the cache AND API are unavailable, returns nil" do
+      Zaikio::JWTAuth.configuration.cache.delete("zaikio::jwt_auth::foo.json")
+
+      stub_request(:get, "http://hub.zaikio.test/foo.json")
+        .to_return(status: 500)
+
+      assert_nil DirectoryCache.fetch("foo.json")
+    end
   end
 end

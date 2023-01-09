@@ -15,6 +15,19 @@ module Zaikio
       BadResponseError = Class.new(StandardError)
 
       class << self
+        # Retrieve some data from the Hub, reachable at `directory_path`. Attempts to
+        # retrieve data from a cache first (usually Redis, if configured). Caching can be
+        # skipped by setting an `:invalidate` option, or if the cached data is stale it
+        # will be refetched from the Hub anyway. Please note that this method can return
+        # `nil` if there is no cache available and the Hub is giving error responses or
+        # failures.
+        #
+        # @example Fetching revoked access token information
+        #
+        #   DirectoryCache.fetch("api/v1/revoked_access_tokens.json")
+        #
+        # @returns Hash (in the happy path)
+        # @returns nil (if the cache is unavailable and the API is down)
         def fetch(directory_path, options = {})
           cache = Zaikio::JWTAuth.configuration.cache.read("zaikio::jwt_auth::#{directory_path}")
 
