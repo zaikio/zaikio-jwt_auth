@@ -34,10 +34,14 @@ module Zaikio
     def self.revoked_token_ids
       return [] if mocked_jwt_payload
 
-      configuration.revoked_token_ids || DirectoryCache.fetch(
+      return configuration.revoked_token_ids if configuration.revoked_token_ids
+
+      result = DirectoryCache.fetch(
         "api/v1/revoked_access_tokens.json",
         expires_after: 60.minutes
-      )["revoked_token_ids"]
+      ) || {}
+
+      result.fetch("revoked_token_ids", [])
     end
 
     def self.included(base)
