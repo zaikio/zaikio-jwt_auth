@@ -18,14 +18,13 @@ module Zaikio
         def fetch(directory_path, options = {})
           cache = Zaikio::JWTAuth.configuration.cache.read("zaikio::jwt_auth::#{directory_path}")
 
-          json = Oj.load(cache) if cache
+          return reload_or_enqueue(directory_path) unless cache
 
-          if !cache || options[:invalidate] || cache_expired?(json, options[:expires_after])
-            new_values = reload_or_enqueue(directory_path)
-            return new_values || json["data"]
-          end
+          json = Oj.load(cache)
 
-          json["data"]
+          if options[:invalidate] || cache_expired?(json, options[:expires_after])
+            reload_or_enqueue(directory_path)
+          end || json["data"]
         end
 
         def update(directory_path, options = {})

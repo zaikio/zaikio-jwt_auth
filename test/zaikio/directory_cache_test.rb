@@ -46,5 +46,20 @@ module Zaikio::JWTAuth
 
       assert DirectoryCache::UpdateJob.new.perform("foo.json")
     end
+
+    test "if the cache is unavailable, it goes to the API and returns early" do
+      Zaikio::JWTAuth.configuration.cache.delete("zaikio::jwt_auth::foo.json")
+
+      stub_request(:get, "http://hub.zaikio.test/foo.json")
+        .to_return(status: 200,
+                   headers: { "Content-Type" => "application/json" }, body: {
+                     revoked_token_ids: %w[old-token]
+                   }.to_json)
+
+      assert_equal(
+        { "revoked_token_ids" => %w[old-token] },
+        DirectoryCache.fetch("foo.json")
+      )
+    end
   end
 end

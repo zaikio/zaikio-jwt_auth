@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Fix `NoMethodError: undefined method '[]' for nil` when Directory cache is unavailable
+
 ## [2.2.0] - 2022-09-28
 
 * Added rack Middleware for rack-attack throttling
