@@ -180,21 +180,29 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     token = generate_token(sub: "Person/abc")
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_subject"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_subject", "Expected Subject Type: Organization | Subject type from "\
+    "Access Token: Person - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "forbidden if scope does not exist" do
     token = generate_token(scope: ["directory.person.r", "test_app.some.rw"])
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_scope", "This endpoint requires one of the following scopes: "\
+    "test_app.resources.r, test_app.resources.rw but your access token only includes the following scopes: "\
+    "directory.person.r, test_app.some.rw - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "forbidden if scope does not have correct permission" do
     token = generate_token
     post "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_scope", "This endpoint requires one of the following scopes: "\
+    "test_app.resources.w, test_app.resources.rw but your access token only includes the following scopes: "\
+    "directory.organization.r, test_app.resources.r - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "success if if option is not fullfilled" do
@@ -215,7 +223,10 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     token = generate_token(scope: ["test_app.resources_destroy.w"])
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_scope", "This endpoint requires one of the following scopes: "\
+    "test_app.resources.r, test_app.resources.rw but your access token only includes the following scopes: "\
+    "test_app.resources_destroy.w - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "successful if scope is only for one action but the right one" do
@@ -279,7 +290,10 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     )
     get "/other_app_resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_scope", "This endpoint requires one of the following scopes: "\
+    "directory.organization.r, directory.organization.rw but your access token only includes the following scopes: "\
+    "test_app.organization.r - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test ".authorize_by_jwt_subject_type can be set multiple times and even cleared" do
