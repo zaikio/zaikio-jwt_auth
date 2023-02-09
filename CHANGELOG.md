@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2023-02-09
+
+* Add more detailed information to error responses
 * Fix `NoMethodError: undefined method '[]' for nil` when Directory cache is unavailable
 * Ensure callers handle `DirectoryCache.fetch` returning nil
 
@@ -83,7 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.0.0...v2.1.0
