@@ -47,36 +47,15 @@ module Zaikio
 
       # scope_options is an array of objects with:
       # scope, app_name (optional), except/only (array, optional), type (read, write, readwrite)
-      def scope_by_configurations?(scope_configurations, action_name, context) # rubocop:disable Metrics/AbcSize
-        configuration = scope_configurations.find do |scope_configuration|
-          action_matches = action_matches_config?(scope_configuration, action_name)
-
-          if action_matches && scope_configuration[:if] && !context.instance_exec(&scope_configuration[:if])
-            false
-          elsif action_matches && scope_configuration[:unless] && context.instance_exec(&scope_configuration[:unless])
-            false
-          else
-            action_matches
-          end
-        end
-
+      def scope_by_configurations?(configuration, action_name)
         return true unless configuration
 
         scope?(configuration[:scopes], action_name, app_name: configuration[:app_name], type: configuration[:type])
       end
 
-      def action_matches_config?(scope_configuration, action_name)
-        if scope_configuration[:only]
-          Array(scope_configuration[:only]).any? { |a| a.to_s == action_name }
-        elsif scope_configuration[:except]
-          Array(scope_configuration[:except]).none? { |a| a.to_s == action_name }
-        else
-          true
-        end
-      end
-
-      def scope?(allowed_scopes, action_name, app_name: nil, type: nil)
+      def scope?(allowed_scopes, action_name, app_name: nil, type: nil, scope: nil) # rubocop:disable Metrics/AbcSize
         app_name ||= Zaikio::JWTAuth.configuration.app_name
+        scope ||= self.scope
         Array(allowed_scopes).map(&:to_s).any? do |allowed_scope|
           scope.any? do |s|
             parts = s.split(".")

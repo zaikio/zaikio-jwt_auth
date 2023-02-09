@@ -59,21 +59,29 @@ class TestHelperTest < ActionDispatch::IntegrationTest
     token = mock_jwt(sub: "Person/abc")
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_subject"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_subject", "Expected Subject Type: Organization | Subject type from "\
+    "Access Token: Person - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "forbidden if scope does not exist" do
     token = mock_jwt(scope: ["directory.person.r", "test_app.some.rw"], sub: "Organization/123")
     get "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_scope", "This endpoint requires one of the following scopes: "\
+    "test_app.resources.r, test_app.resources.rw but your access token only includes the following scopes: "\
+    "directory.person.r, test_app.some.rw - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "forbidden if scope does not have correct permission" do
     token = mock_jwt(scope: ["directory.person.r", "test_app.resources.r"], sub: "Organization/123")
     post "/resources", headers: { "Authorization" => "Bearer #{token}" }
     assert_response :forbidden
-    assert_equal({ "errors" => ["unpermitted_scope"] }.to_json, response.body)
+    assert_equal({ "errors" => ["unpermitted_scope", "This endpoint requires one of the following scopes: "\
+    "test_app.resources.w, test_app.resources.rw but your access token only includes the following scopes: "\
+    "directory.person.r, test_app.resources.r - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
   end
 
   test "is successful if correct JWT was passed" do
