@@ -70,7 +70,7 @@ module Zaikio
         rescue Errno::ECONNREFUSED, Net::ReadTimeout, BadResponseError
           Zaikio::JWTAuth.configuration.logger
                          .info("Error updating DirectoryCache(#{directory_path}), enqueueing job to update")
-          UpdateJob.set(wait: 10.seconds).perform_later(directory_path)
+          UpdateJob.perform_later(directory_path)
           nil
         end
 

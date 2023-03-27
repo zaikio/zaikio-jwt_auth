@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Do not schedule `Cache::UpdateJob` for waiting time as it is not supported by every ActiveJob Queue Adapater (such as sneakers)
+
 ## [2.3.0] - 2023-02-09
 
 * Add more detailed information to error responses
