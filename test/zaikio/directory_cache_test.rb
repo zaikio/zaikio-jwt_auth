@@ -27,7 +27,6 @@ module Zaikio::JWTAuth
       stub_request(:get, "http://hub.zaikio.test/foo.json")
         .to_return(status: 429, body: "Retry later", headers: { "Content-Type" => "text/plain" })
 
-      DirectoryCache::UpdateJob.expects(:set).with(wait: 10.seconds).returns(DirectoryCache::UpdateJob)
       DirectoryCache::UpdateJob.expects(:perform_later).with("foo.json")
 
       assert_equal(
