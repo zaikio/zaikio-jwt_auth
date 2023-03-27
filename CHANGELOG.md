@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2023-03-27
+
 * Do not schedule `Cache::UpdateJob` for waiting time as it is not supported by every ActiveJob Queue Adapater (such as sneakers)
 
 ## [2.3.0] - 2023-02-09
@@ -88,7 +90,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.0...v2.1.1
