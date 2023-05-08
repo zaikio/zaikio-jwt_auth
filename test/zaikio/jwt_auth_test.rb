@@ -117,6 +117,19 @@ class OtherAppResourcesController < ApplicationController
   end
 end
 
+class MultiAppResourcesController < ApplicationController
+  include Zaikio::JWTAuth
+
+  before_action :authenticate_by_jwt
+
+  authorize_by_jwt_scopes :organization
+  authorize_by_jwt_scopes :organization, app_name: "zaikio"
+
+  def index
+    render plain: "hello"
+  end
+end
+
 class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   def setup
     Zaikio::JWTAuth.configure do |config|
@@ -134,6 +147,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
         get :custom_route, params: { on: :collection }
       end
       resources :other_app_resources
+      resources :multi_app_resources
     end
   end
 
@@ -325,5 +339,23 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     other = Class.new(OtherAppResourcesController)
     assert_equal [{ app_name: "directory", scopes: :organization }],
                  other.authorize_by_jwt_scopes
+  end
+
+  test "successful if JWT with default app name" do
+    token = generate_token(scope: ["test_app.organization.r"])
+    get "/multi_app_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+  end
+
+  test "successful if JWT with non-default app name" do
+    token = generate_token(scope: ["zaikio.organization.r"])
+    get "/multi_app_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+  end
+
+  test "not successful if JWT with other app name" do
+    token = generate_token(scope: ["random.organization.r"])
+    get "/multi_app_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :forbidden
   end
 end

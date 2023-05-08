@@ -5,7 +5,7 @@ require "logger"
 module Zaikio
   module JWTAuth
     class DirectoryCache
-      class UpdateJob < ::ActiveJob::Base
+      class UpdateJob < ::ActiveJob::Base # rubocop:disable Rails/ApplicationJob
         def perform(directory_path)
           DirectoryCache.fetch(directory_path)
           true # This job will always re-queue until it succeeds.
