@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 2023-05-08
+
 * Support multiple apps in one controller
 
 ## [2.4.0] - 2023-03-27
@@ -92,7 +94,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.1...HEAD
+[2.4.1]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.1.1...v2.2.0
