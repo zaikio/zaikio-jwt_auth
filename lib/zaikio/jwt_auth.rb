@@ -131,8 +131,8 @@ module Zaikio
 
       private
 
-      def find_scope_configuration(scope_configurations)
-        scope_configurations.find do |scope_configuration|
+      def find_scope_configurations(scope_configurations)
+        scope_configurations.select do |scope_configuration|
           action_matches = action_matches_config?(scope_configuration)
 
           if action_matches && scope_configuration[:if] && !instance_exec(&scope_configuration[:if])
@@ -169,21 +169,23 @@ module Zaikio
       end
 
       def show_error_if_authorize_by_jwt_scopes_fails(token_data)
-        configuration = find_scope_configuration(self.class.authorize_by_jwt_scopes)
+        configurations = find_scope_configurations(self.class.authorize_by_jwt_scopes)
 
-        return if token_data.scope_by_configurations?(
-          configuration,
-          action_name
-        )
+        return if configurations.empty?
 
-        details = nil
-
-        if configuration
-          required_scopes = required_scopes(token_data, configuration)
-
-          details = "This endpoint requires one of the following scopes: #{required_scopes.join(', ')} but your " \
-          "access token only includes the following scopes: #{token_data.scope.join(', ')} - #{DOCS_LINK}"
+        configuration = configurations.find do |scope_configuration|
+          token_data.scope_by_configurations?(
+            scope_configuration,
+            action_name
+          )
         end
+
+        return if configuration
+
+        required_scopes = required_scopes(token_data, configuration || configurations.first)
+
+        details = "This endpoint requires one of the following scopes: #{required_scopes.join(', ')} but your " \
+        "access token only includes the following scopes: #{token_data.scope.join(', ')} - #{DOCS_LINK}"
 
         render_error(["unpermitted_scope", details])
       end

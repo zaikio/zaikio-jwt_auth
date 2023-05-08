@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Support multiple apps in one controller
+
 ## [2.4.0] - 2023-03-27
 
 * Do not schedule `Cache::UpdateJob` for waiting time as it is not supported by every ActiveJob Queue Adapater (such as sneakers)
