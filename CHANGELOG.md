@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Accept `zaikio.revoked_access_token` event when access token got revoked
+
 ## [2.4.1] - 2023-05-08
 
 * Support multiple apps in one controller
