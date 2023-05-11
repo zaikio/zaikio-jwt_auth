@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2023-05-11
+
 * Accept `zaikio.revoked_access_token` event when access token got revoked
 
 ## [2.4.1] - 2023-05-08
@@ -96,7 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add a changelog
 * Setup automated gem publishing
 
-[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.1...HEAD
+[Unreleased]: https://github.com/zaikio/zaikio-directory-models/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.1...v2.5.0
 [2.4.1]: https://github.com/zaikio/zaikio-directory-models/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/zaikio/zaikio-directory-models/compare/v2.2.0...v2.3.0
