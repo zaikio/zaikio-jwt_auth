@@ -119,7 +119,7 @@ module Zaikio
       end
 
       def update_revoked_access_tokens_by_webhook
-        return unless params[:name] == "directory.revoked_access_token"
+        return unless %w[directory.revoked_access_token zaikio.revoked_access_token].include?(params[:name])
 
         DirectoryCache.update("api/v1/revoked_access_tokens.json", expires_after: 60.minutes) do |data|
           data["revoked_token_ids"] << params[:payload][:access_token_id]
