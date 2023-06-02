@@ -130,6 +130,20 @@ class MultiAppResourcesController < ApplicationController
   end
 end
 
+class PersonResourcesController < ApplicationController
+  include Zaikio::JWTAuth
+
+  before_action :authenticate_by_jwt
+
+  authorize_by_jwt_subject_type "Person"
+
+  authorize_by_jwt_scopes :person
+
+  def index
+    render plain: "hello"
+  end
+end
+
 class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   def setup
     Zaikio::JWTAuth.configure do |config|
@@ -148,6 +162,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
       end
       resources :other_app_resources
       resources :multi_app_resources
+      resources :person_resources
     end
   end
 
@@ -197,6 +212,22 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_equal({ "errors" => ["unpermitted_subject", "Expected Subject Type: Organization | Subject type from "\
     "Access Token: Person - For more information check our docs: "\
     "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
+  end
+
+  test "forbidden if subject type is Person but organization token is passed" do
+    token = generate_token(sub: "Organization/abc", scope: ["test_app.person.r"])
+    get "/person_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :forbidden
+    assert_equal({ "errors" => ["unpermitted_subject", "Expected Subject Type: Person | Subject type from "\
+    "Access Token: Organization - For more information check our docs: "\
+    "https://docs.zaikio.com/guide/oauth/scopes.html"] }.to_json, response.body)
+  end
+
+  test "allowed if subject type is Person but on behalf token is passed" do
+    token = generate_token(sub: "Person/def>Organization/abc", scope: ["test_app.person.r"])
+    get "/person_resources", headers: { "Authorization" => "Bearer #{token}" }
+    assert_response :success
+    assert_equal "hello", response.body
   end
 
   test "forbidden if scope does not exist" do

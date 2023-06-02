@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Support on behalf access tokens when `authorize_by_jwt_subject_type "Person"`
+
 ## [2.5.0] - 2023-05-11
 
 * Accept `zaikio.revoked_access_token` event when access token got revoked
