@@ -192,7 +192,8 @@ module Zaikio
 
       def show_error_if_authorize_by_jwt_subject_type_fails(token_data)
         if !self.class.authorize_by_jwt_subject_type ||
-           self.class.authorize_by_jwt_subject_type == token_data.subject_type
+           self.class.authorize_by_jwt_subject_type == token_data.subject_type ||
+           (self.class.authorize_by_jwt_subject_type == "Person" && token_data.on_behalf_of_id)
           return
         end
 
