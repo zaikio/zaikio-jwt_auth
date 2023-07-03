@@ -29,7 +29,14 @@ module Zaikio
         # @returns Hash (in the happy path)
         # @returns nil (if the cache is unavailable and the API is down)
         def fetch(directory_path, options = {})
-          cache = Zaikio::JWTAuth.configuration.cache.read("zaikio::jwt_auth::#{directory_path}")
+          cache = begin
+            Zaikio::JWTAuth.configuration.cache.read("zaikio::jwt_auth::#{directory_path}")
+          rescue StandardError => e
+            Zaikio::JWTAuth.configuration.logger
+                           .warn("Error reading DirectoryCache(#{directory_path}) from Cache, falling "\
+                                 "back to API: #{e.inspect}")
+            nil
+          end
 
           return reload_or_enqueue(directory_path) unless cache
 
