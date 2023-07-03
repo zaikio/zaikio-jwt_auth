@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Handle errors when fetching the directory cache and fallback to API
+
 ## [2.6.0] - 2023-06-05
 
 * Support on behalf access tokens when `authorize_by_jwt_subject_type "Person"`

@@ -61,6 +61,21 @@ module Zaikio::JWTAuth
       )
     end
 
+    test "if reading the cache causes a connection error, it goes to the API" do
+      Zaikio::JWTAuth.configuration.cache.stubs(:read).raises(Redis::ConnectionError.new("Connection refused"))
+
+      stub_request(:get, "http://hub.zaikio.test/foo.json")
+        .to_return(status: 200,
+                   headers: { "Content-Type" => "application/json" }, body: {
+                     revoked_token_ids: %w[old-token]
+                   }.to_json)
+
+      assert_equal(
+        { "revoked_token_ids" => %w[old-token] },
+        DirectoryCache.fetch("foo.json")
+      )
+    end
+
     test "if the cache AND API are unavailable, returns nil" do
       Zaikio::JWTAuth.configuration.cache.delete("zaikio::jwt_auth::foo.json")
 
