@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ["crispymtn", "Jalyna Schröder", "Martin Spickermann"]
   spec.email       = ["op@crispymtn.com", "js@crispymtn.com", "spickermann@gmail.com"]
   spec.homepage    = "https://github.com/zaikio/zaikio-jwt_auth"
-  spec.summary     = "JWT-Based authentication and authorization with zaikio"
-  spec.description = "JWT-Based authentication and authorization with zaikio."
+  spec.summary     = "JWT-Based authentication and authorization with Zaikio"
+  spec.description = "JWT-Based authentication and authorization with Zaikio."
   spec.license     = "MIT"
 
   if spec.respond_to?(:metadata)
