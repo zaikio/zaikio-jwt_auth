@@ -10,7 +10,7 @@ module Zaikio
       class << self
         def loader
           lambda do |options|
-            return TestHelper.jwk_set if Rails.env.test?
+            return TestHelper.jwk_set if JWTAuth.configuration.test_mode
 
             reload_keys if options[:invalidate]
 
