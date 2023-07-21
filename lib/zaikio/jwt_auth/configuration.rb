@@ -11,7 +11,7 @@ module Zaikio
         production: "https://hub.zaikio.com"
       }.freeze
 
-      attr_accessor :app_name, :cache, :host
+      attr_accessor :app_name, :cache, :host, :test_mode
       attr_reader :environment
       attr_writer :logger, :revoked_token_ids, :keys
 
@@ -19,6 +19,7 @@ module Zaikio
         @environment = :sandbox
         @revoked_token_ids = nil
         @keys = nil
+        @test_mode = false
       end
 
       def logger

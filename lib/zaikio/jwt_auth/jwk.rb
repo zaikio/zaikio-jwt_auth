@@ -10,7 +10,10 @@ module Zaikio
       class << self
         def loader
           lambda do |options|
+            return TestHelper.jwk_set if JWTAuth.configuration.test_mode
+
             reload_keys if options[:invalidate]
+
             {
               keys: keys.map do |key_data|
                 JWT::JWK.import(key_data.with_indifferent_access).export

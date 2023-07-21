@@ -75,6 +75,12 @@ module Zaikio
       TokenData.new(payload)
     end
 
+    def self.decode_jwt(token, **options)
+      options = options.reverse_merge(algorithms: ["RS256"], jwks: JWK.loader)
+      payload, = JWT.decode(token, nil, true, **options)
+      TokenData.new(payload)
+    end
+
     module ClassMethods
       def authorize_by_jwt_subject_type(type = :_not_given_)
         if type != :_not_given_
