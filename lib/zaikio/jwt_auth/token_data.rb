@@ -21,8 +21,11 @@ module Zaikio
         }
       end
 
-      def initialize(payload)
+      attr_reader :token
+
+      def initialize(payload, token: nil)
         @payload = payload
+        @token = token
       end
 
       def audience

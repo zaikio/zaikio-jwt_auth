@@ -72,13 +72,13 @@ module Zaikio
 
       payload, = JWT.decode(token, nil, true, **options)
 
-      TokenData.new(payload)
+      TokenData.new(payload, token: token)
     end
 
     def self.decode_jwt(token, **options)
       options = options.reverse_merge(algorithms: ["RS256"], jwks: JWK.loader)
       payload, = JWT.decode(token, nil, true, **options)
-      TokenData.new(payload)
+      TokenData.new(payload, token: token)
     end
 
     module ClassMethods
