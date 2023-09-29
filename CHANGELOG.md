@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-* Add convenient method `token_data.token` to get the current token as string.
+* Add convenient method `token_data.to_s` to get the current token as string.
 
 ## [2.7.0] - 2023-07-03
 

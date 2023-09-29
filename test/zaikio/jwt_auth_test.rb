@@ -96,7 +96,7 @@ class ResourcesController < ApplicationController
     @scope = klass.find(token_data.subject_id) # Current.scope
     @audience = token_data.audience
     @expires_at = token_data.expires_at
-    @token = token_data.token
+    @token = token_data.to_s
   end
 
   def jwt_options
