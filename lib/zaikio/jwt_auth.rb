@@ -62,7 +62,15 @@ module Zaikio
     HEADER_FORMAT = /\ABearer (.+)\z/.freeze
 
     def self.extract(authorization_header_string, **options)
-      return TokenData.new(Zaikio::JWTAuth.mocked_jwt_payload) if Zaikio::JWTAuth.mocked_jwt_payload
+      if Zaikio::JWTAuth.mocked_jwt_payload
+        jwk = Zaikio::JWTAuth::TestHelper.jwk
+        return TokenData.new(Zaikio::JWTAuth.mocked_jwt_payload, token: JWT.encode(
+          Zaikio::JWTAuth.mocked_jwt_payload,
+          jwk.signing_key,
+          jwk[:alg],
+          kid: jwk[:kid]
+        ))
+      end
 
       return if authorization_header_string.blank?
 
