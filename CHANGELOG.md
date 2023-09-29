@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Fix: support `token_data.to_s` when using mocked JWTs
+
 ## [2.8.0] - 2023-09-29
 
 * Add convenient method `token_data.to_s` to get the current token as string.

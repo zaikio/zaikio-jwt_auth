@@ -33,6 +33,7 @@ class TestHelperResourcesController < ApplicationController
     klass = token_data.subject_type == "Organization" ? TestHelperOrganization : TestHelperPerson
     @scope = klass.find(token_data.subject_id) # Current.scope
     @audience = token_data.audience
+    @token = token_data.to_s
   end
 end
 
@@ -98,5 +99,17 @@ class TestHelperTest < ActionDispatch::IntegrationTest
     assert_equal "123", scope.id
     audience = controller.instance_variable_get(:@audience)
     assert_equal "directory", audience
+    assert_equal(
+      {
+        "iss" => "ZAI",
+        "sub" => "Organization/123",
+        "aud" => ["directory"],
+        "jku" => "http://hub.zaikio.test/api/v1/jwt_public_keys.json",
+        "scope" => ["directory.person.r", "test_app.resources.r"]
+      },
+      JWT.decode(
+        controller.instance_variable_get(:@token), nil, false, algorithms: ["RS256"]
+      ).first.except("jti", "nbf", "exp")
+    )
   end
 end
