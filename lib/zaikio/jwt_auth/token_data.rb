@@ -21,8 +21,13 @@ module Zaikio
         }
       end
 
-      def initialize(payload)
+      def initialize(payload, token: nil)
         @payload = payload
+        @token = token
+      end
+
+      def to_s
+        @token
       end
 
       def audience

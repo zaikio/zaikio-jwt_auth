@@ -96,6 +96,7 @@ class ResourcesController < ApplicationController
     @scope = klass.find(token_data.subject_id) # Current.scope
     @audience = token_data.audience
     @expires_at = token_data.expires_at
+    @token = token_data.to_s
   end
 
   def jwt_options
@@ -314,6 +315,7 @@ class ResourcesControllerTest < ActionDispatch::IntegrationTest # rubocop:disabl
     assert_equal "directory", audience
     expires_at = controller.instance_variable_get(:@expires_at)
     assert_equal exp.to_i, expires_at.to_i
+    assert_equal token, controller.instance_variable_get(:@token)
   end
 
   test "is successful if JWT signed with second JWK is passed" do
